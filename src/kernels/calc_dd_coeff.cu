@@ -1,13 +1,14 @@
 
-__global__ void calc_dd_coeff(
+__global__
+void calc_dd_coeff(
     const double dx,
     const double dy,
     const double dz,
-    const double * restrict eta,
-    const double * restrict xi,
-    double * restrict dd_i,
-    double * restrict dd_j,
-    double * restrict dd_k
+    const double * __restrict__ eta,
+    const double * __restrict__ xi,
+    double * __restrict__ dd_i,
+    double * __restrict__ dd_j,
+    double * __restrict__ dd_k
     )
 {
     size_t a = blockIdx.x * blockDim.x + threadIdx.x;

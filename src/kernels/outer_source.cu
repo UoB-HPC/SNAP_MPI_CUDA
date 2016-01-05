@@ -21,11 +21,11 @@ __global__ void calc_outer_source(
     const unsigned int ng,
     const unsigned int cmom,
     const unsigned int nmom,
-    const double * restrict fixed_source,
-    const double * restrict scattering_matrix,
-    const double * restrict scalar_flux,
-    const double * restrict scalar_flux_moments,
-    double * restrict outer_source
+    const double * __restrict__ fixed_source,
+    const double * __restrict__ scattering_matrix,
+    const double * __restrict__ scalar_flux,
+    const double * __restrict__ scalar_flux_moments,
+    double * __restrict__ outer_source
     )
 {
     const size_t i = blockIdx.x * blockDim.x + threadIdx.x;

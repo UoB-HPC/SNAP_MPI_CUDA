@@ -35,30 +35,30 @@ __global__ void reduce_flux_moments(
     const unsigned int ng,
     const unsigned int cmom,
 
-    const double * restrict angular_flux_in_0,
-    const double * restrict angular_flux_in_1,
-    const double * restrict angular_flux_in_2,
-    const double * restrict angular_flux_in_3,
-    const double * restrict angular_flux_in_4,
-    const double * restrict angular_flux_in_5,
-    const double * restrict angular_flux_in_6,
-    const double * restrict angular_flux_in_7,
+    const double * __restrict__ angular_flux_in_0,
+    const double * __restrict__ angular_flux_in_1,
+    const double * __restrict__ angular_flux_in_2,
+    const double * __restrict__ angular_flux_in_3,
+    const double * __restrict__ angular_flux_in_4,
+    const double * __restrict__ angular_flux_in_5,
+    const double * __restrict__ angular_flux_in_6,
+    const double * __restrict__ angular_flux_in_7,
 
-    const double * restrict angular_flux_out_0,
-    const double * restrict angular_flux_out_1,
-    const double * restrict angular_flux_out_2,
-    const double * restrict angular_flux_out_3,
-    const double * restrict angular_flux_out_4,
-    const double * restrict angular_flux_out_5,
-    const double * restrict angular_flux_out_6,
-    const double * restrict angular_flux_out_7,
+    const double * __restrict__ angular_flux_out_0,
+    const double * __restrict__ angular_flux_out_1,
+    const double * __restrict__ angular_flux_out_2,
+    const double * __restrict__ angular_flux_out_3,
+    const double * __restrict__ angular_flux_out_4,
+    const double * __restrict__ angular_flux_out_5,
+    const double * __restrict__ angular_flux_out_6,
+    const double * __restrict__ angular_flux_out_7,
 
-    const double * restrict velocity_delta,
-    const double * restrict quad_weights,
-    const double * restrict scat_coeff,
+    const double * __restrict__ velocity_delta,
+    const double * __restrict__ quad_weights,
+    const double * __restrict__ scat_coeff,
 
-    double * restrict scalar_flux_moments,
-    __shared__ double * restrict local_scalar
+    double * __restrict__ scalar_flux_moments,
+    __shared__ double * __restrict__ local_scalar
     )
 {
     const size_t a = threadIdx.x;

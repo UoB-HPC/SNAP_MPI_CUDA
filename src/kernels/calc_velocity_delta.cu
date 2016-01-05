@@ -1,9 +1,9 @@
 
 // Calculate the time absorbtion coefficient
 __global__ void calc_velocity_delta(
-    const double * restrict velocities,
+    const double * __restrict__ velocities,
     const double dt,
-    double * restrict velocity_delta
+    double * __restrict__ velocity_delta
     )
 {
     size_t g = blockIdx.x * blockDim.x + threadIdx.x;

@@ -8,13 +8,13 @@ __global__ void calc_denominator(
     const unsigned int nz,
     const unsigned int nang,
     const unsigned int ng,
-    const double * restrict mat_cross_section,
-    const double * restrict velocity_delta,
-    const double * restrict mu,
-    const double * restrict dd_i,
-    const double * restrict dd_j,
-    const double * restrict dd_k,
-    double * restrict denominator
+    const double * __restrict__ mat_cross_section,
+    const double * __restrict__ velocity_delta,
+    const double * __restrict__ mu,
+    const double * __restrict__ dd_i,
+    const double * __restrict__ dd_j,
+    const double * __restrict__ dd_k,
+    double * __restrict__ denominator
     )
 {
     size_t a = blockIdx.x * blockDim.x + threadIdx.x;
