@@ -53,4 +53,4 @@ ocl_init.c:	$(KERNEL_HEADER_FILES)
 .PHONY: clean
 
 clean:
-	rm -f snap kernels/*.h
+	rm -f snap kernels/*.o
