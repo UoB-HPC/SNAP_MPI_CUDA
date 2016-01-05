@@ -34,7 +34,7 @@ snap: \
 	$(MPI_COMPILER) $^ $(CFLAGS_$(COMPILER)) $(OCL) $(OPTIONS) -o $@
 
 kernels/%.o:	kernels/%.cu
-	nvcc -c $< $@
+	nvcc -c $< -o $@
 
 
 KERNEL_HEADER_FILES=\
