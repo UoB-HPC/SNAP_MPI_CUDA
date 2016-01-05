@@ -1,6 +1,4 @@
 
-#pragma OPENCL EXTENSION cl_khr_fp64 : enable
-
 #define SOURCE_INDEX(m,g,i,j,k,cmom,ng,nx,ny) ((m)+((cmom)*(g))+((cmom)*(ng)*(i))+((cmom)*(ng)*(nx)*(j))+((cmom)*(ng)*(nx)*(ny)*(k)))
 #define SCATTERING_MATRIX_INDEX(m,g1,g2,nmom,ng) ((m)+((nmom)*(g1))+((nmom)*(ng)*(g2)))
 #define SCALAR_FLUX_INDEX(g,i,j,k,ng,nx,ny) ((g)+((ng)*(i))+((ng)*(nx)*(j))+((ng)*(nx)*(ny)*(k)))
@@ -16,23 +14,23 @@
 
 // 3D kernel, in local nx,ny,nz dimensions
 // Probably not going to vectorise very well..
-kernel void calc_inner_source(
+__global__ void calc_inner_source(
     const unsigned int nx,
     const unsigned int ny,
     const unsigned int nz,
     const unsigned int ng,
     const unsigned int cmom,
     const unsigned int nmom,
-    global const double * restrict outer_source,
-    global const double * restrict scattering_matrix,
-    global const double * restrict scalar_flux,
-    global const double * restrict scalar_flux_moments,
-    global double * restrict inner_source
+    const double * restrict outer_source,
+    const double * restrict scattering_matrix,
+    const double * restrict scalar_flux,
+    const double * restrict scalar_flux_moments,
+    double * restrict inner_source
     )
 {
-    const size_t i = get_global_id(0);
-    const size_t j = get_global_id(1);
-    const size_t k = get_global_id(2);
+    const size_t i = blockIdx.x * blockDim.x + threadIdx.x;
+    const size_t j = blockIdx.y * blockDim.y + threadIdx.y;
+    const size_t k = blockIdx.z * blockDim.z + threadIdx.z;
 
     for (unsigned int g = 0; g < ng; g++)
     {
