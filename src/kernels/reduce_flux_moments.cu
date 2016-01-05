@@ -57,10 +57,11 @@ __global__ void reduce_flux_moments(
     const double * __restrict__ quad_weights,
     const double * __restrict__ scat_coeff,
 
-    double * __restrict__ scalar_flux_moments,
-    __shared__ double * __restrict__ local_scalar
+    double * __restrict__ scalar_flux_moments
     )
 {
+    extern __shared__ double local_scalar[];
+
     const size_t a = threadIdx.x;
     const size_t g = blockIdx.x;
 
