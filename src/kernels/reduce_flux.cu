@@ -1,7 +1,4 @@
 
-#pragma OPENCL EXTENSION cl_khr_fp64 : enable
-
-
 #define ANGULAR_FLUX_INDEX(a,g,i,j,k,nang,ng,nx,ny) ((a)+((nang)*(g))+((nang)*(ng)*(i))+((nang)*(ng)*(nx)*(j))+((nang)*(ng)*(nx)*(ny)*(k)))
 #define SCALAR_FLUX_INDEX(g,i,j,k,ng,nx,ny) ((g)+((ng)*(i))+((ng)*(nx)*(j))+((ng)*(nx)*(ny)*(k)))
 
@@ -27,48 +24,49 @@
 // We want to perform a weighted sum of angles in each cell in each energy group
 // One work-group per cell per energy group, and reduce within a work-group
 // Work-groups must be power of two sized
-kernel void reduce_flux(
+__global__ void reduce_flux(
     const unsigned int nx,
     const unsigned int ny,
     const unsigned int nz,
     const unsigned int nang,
     const unsigned int ng,
 
-    global const double * restrict angular_flux_in_0,
-    global const double * restrict angular_flux_in_1,
-    global const double * restrict angular_flux_in_2,
-    global const double * restrict angular_flux_in_3,
-    global const double * restrict angular_flux_in_4,
-    global const double * restrict angular_flux_in_5,
-    global const double * restrict angular_flux_in_6,
-    global const double * restrict angular_flux_in_7,
+    const double * restrict angular_flux_in_0,
+    const double * restrict angular_flux_in_1,
+    const double * restrict angular_flux_in_2,
+    const double * restrict angular_flux_in_3,
+    const double * restrict angular_flux_in_4,
+    const double * restrict angular_flux_in_5,
+    const double * restrict angular_flux_in_6,
+    const double * restrict angular_flux_in_7,
 
-    global const double * restrict angular_flux_out_0,
-    global const double * restrict angular_flux_out_1,
-    global const double * restrict angular_flux_out_2,
-    global const double * restrict angular_flux_out_3,
-    global const double * restrict angular_flux_out_4,
-    global const double * restrict angular_flux_out_5,
-    global const double * restrict angular_flux_out_6,
-    global const double * restrict angular_flux_out_7,
+    const double * restrict angular_flux_out_0,
+    const double * restrict angular_flux_out_1,
+    const double * restrict angular_flux_out_2,
+    const double * restrict angular_flux_out_3,
+    const double * restrict angular_flux_out_4,
+    const double * restrict angular_flux_out_5,
+    const double * restrict angular_flux_out_6,
+    const double * restrict angular_flux_out_7,
 
-    global const double * restrict velocity_delta,
-    global const double * restrict quad_weights,
+    const double * restrict velocity_delta,
+    const double * restrict quad_weights,
 
-    global double * restrict scalar_flux,
-    local double * restrict local_scalar
+    double * restrict scalar_flux,
+    __shared__ double * restrict local_scalar
     )
 {
-    const size_t a = get_local_id(0);
-    const size_t g = get_group_id(0);
+    const size_t a = threadIdx.x;
+    const size_t g = blockIdx.x;
 
-    const size_t i = get_global_id(1) % nx;
-    const size_t j = (get_global_id(1) / nx) % ny;
-    const size_t k = get_global_id(1) / (nx * ny);
+    const size_t global_id = blockIdx.y * blockDim.y + threadIdx.y;
+    const size_t i = global_id % nx;
+    const size_t j = (global_id / nx) % ny;
+    const size_t k = global_id / (nx * ny);
 
     // Load into local memory
     local_scalar[a] = 0.0;
-    for (unsigned int aa = a; aa < nang; aa += get_local_size(0))
+    for (unsigned int aa = a; aa < nang; aa += blockDim.x)
     {
         const double w = quad_weights[aa];
         if (velocity_delta[g] != 0.0)
@@ -97,16 +95,16 @@ kernel void reduce_flux(
         }
     }
 
-    barrier(CLK_LOCAL_MEM_FENCE);
+    __syncthreads();
 
     // Reduce in local memory
-    for (unsigned int offset = get_local_size(0) / 2; offset > 0; offset /= 2)
+    for (unsigned int offset = blockDim.x / 2; offset > 0; offset /= 2)
     {
         if (a < offset)
         {
             local_scalar[a] += local_scalar[a + offset];
         }
-        barrier(CLK_LOCAL_MEM_FENCE);
+        __syncthreads();
     }
 
     // Save result
