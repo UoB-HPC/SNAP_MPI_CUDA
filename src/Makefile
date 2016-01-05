@@ -33,20 +33,19 @@ snap: \
 	profiler.c
 	$(MPI_COMPILER) $^ $(CFLAGS_$(COMPILER)) $(OCL) $(OPTIONS) -o $@
 
-kernels/%.h:	kernels/%.cl
-	./stringify_opencl $< $@
+kernels/%.o:	kernels/%.cu
+	nvcc -c $< $@
 
 
 KERNEL_HEADER_FILES=\
-	kernels/calc_velocity_delta.h \
-	kernels/calc_dd_coeff.h \
-	kernels/calc_denominator.h \
-	kernels/zero_buffer.h \
-	kernels/outer_source.h \
-	kernels/inner_source.h \
-	kernels/sweep_plane.h \
-	kernels/reduce_flux.h \
-	kernels/reduce_flux_moments.h
+	kernels/calc_velocity_delta.o \
+	kernels/calc_dd_coeff.o \
+	kernels/calc_denominator.o \
+	kernels/outer_source.o \
+	kernels/inner_source.o \
+	kernels/sweep_plane.o \
+	kernels/reduce_flux.o \
+	kernels/reduce_flux_moments.o
 
 ocl_init.c:	$(KERNEL_HEADER_FILES)
 	@touch ocl_init.c
