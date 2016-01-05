@@ -1,6 +1,4 @@
 
-#pragma OPENCL EXTENSION cl_khr_fp64 : enable
-
 struct cell_id
 {
     unsigned int i, j, k;
@@ -25,7 +23,7 @@ struct cell_id
 #define denominator(a,g,i,j,k) denominator[DENOMINATOR_INDEX((a),(g),(i),(j),(k),nang,ng,nx,ny)]
 
 
-kernel void sweep_plane(
+__global__ void sweep_plane(
     const unsigned int nx,
     const unsigned int ny,
     const unsigned int nz,
@@ -37,31 +35,34 @@ kernel void sweep_plane(
     const int kstep,
     const unsigned int oct,
     const unsigned int z_pos,
-    global const struct cell_id * plane,
-    global const double * restrict source,
-    global const double * restrict scat_coeff,
-    global const double * restrict dd_i,
-    global const double * restrict dd_j,
-    global const double * restrict dd_k,
-    global const double * restrict mu,
-    global const double * restrict velocity_delta,
-    global const double * restrict mat_cross_section,
-    global const double * restrict denominator,
-    global const double * restrict angular_flux_in,
-    global double * restrict flux_i,
-    global double * restrict flux_j,
-    global double * restrict flux_k,
-    global double * restrict angular_flux_out
+    const struct cell_id * plane,
+    const double * restrict source,
+    const double * restrict scat_coeff,
+    const double * restrict dd_i,
+    const double * restrict dd_j,
+    const double * restrict dd_k,
+    const double * restrict mu,
+    const double * restrict velocity_delta,
+    const double * restrict mat_cross_section,
+    const double * restrict denominator,
+    const double * restrict angular_flux_in,
+    double * restrict flux_i,
+    double * restrict flux_j,
+    double * restrict flux_k,
+    double * restrict angular_flux_out
     )
 {
     // Recover indexes for angle and group
-    const size_t a = get_global_id(0) % nang;
-    const size_t g = get_global_id(0) / nang;
+    const size_t global_id_x = blockIdx.x * blockDim.x + threadIdx.x;
+    const size_t global_id_y = blockIdx.y * blockDim.y + threadIdx.y;
+
+    const size_t a = global_id_x % nang;
+    const size_t g = global_id_x / nang;
 
     // Read cell index from plane buffer
-    const size_t i = (istep > 0) ? plane[get_global_id(1)].i         : nx - plane[get_global_id(1)].i         - 1;
-    const size_t j = (jstep > 0) ? plane[get_global_id(1)].j         : ny - plane[get_global_id(1)].j         - 1;
-    const size_t k = (kstep > 0) ? plane[get_global_id(1)].k + z_pos : nz - plane[get_global_id(1)].k - z_pos - 1;
+    const size_t i = (istep > 0) ? plane[global_id_y].i         : nx - plane[global_id_y].i         - 1;
+    const size_t j = (jstep > 0) ? plane[global_id_y].j         : ny - plane[global_id_y].j         - 1;
+    const size_t k = (kstep > 0) ? plane[global_id_y].k + z_pos : nz - plane[global_id_y].k - z_pos - 1;
 
     //
     // Compute the angular flux (psi)
