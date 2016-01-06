@@ -25,7 +25,6 @@ snap: \
 	problem.c \
 	source.c \
 	sweep.c \
-	ocl_init.c \
 	cuda_buffers.c \
 	scalar_flux.c \
 	convergence.c \
