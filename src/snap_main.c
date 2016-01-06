@@ -17,15 +17,15 @@
 #include "population.h"
 #include "profiler.h"
 
-#include "ocl_global.h"
-#include "ocl_buffers.h"
+#include "cuda_global.h"
+#include "cuda_buffers.h"
 
 double sweep_mpi_time = 0.0;
 double sweep_mpi_recv_time = 0.0;
 
 /** \mainpage
 * SNAP-MPI is a cut down version of the SNAP mini-app which allows us to
-* investigate MPI decomposition schemes with OpenCL for node-level computation.
+* investigate MPI decomposition schemes with CUDA for node-level computation.
 *
 * The MPI scheme used is KBA, expanding into hybrid-KBA.
 */
@@ -36,8 +36,8 @@ void print_banner(void);
 /** \brief Print out the input paramters */
 void print_input(struct problem * problem);
 
-/** \brief Print out OpenCL information */
-void print_opencl_info(struct context * context);
+/** \brief Print out CUDA information */
+void print_cuda_info(void);
 
 /** \brief Print out the timing report */
 void print_timing_report(struct timers * timers, struct problem * problem, unsigned int total_iterations);
@@ -50,8 +50,6 @@ int main(int argc, char **argv)
 {
     int mpi_err = MPI_Init(&argc, &argv);
     check_mpi(mpi_err, "MPI_Init");
-
-    cl_int clerr;
 
     struct timers timers;
     timers.setup_time = wtime();
@@ -102,11 +100,9 @@ int main(int argc, char **argv)
     struct rankinfo rankinfo;
     setup_comms(&problem, &rankinfo);
 
-    // Initlise the OpenCL
-    struct context context;
-    init_ocl(&context, problem.multigpu, rankinfo.rank);
+    // Initlise the CUDA
     if (rankinfo.rank == 0)
-        print_opencl_info(&context);
+        print_cuda_info();
     struct buffers buffers;
     check_device_memory_requirements(&problem, &rankinfo, &context);
     allocate_buffers(&problem, &rankinfo, &context, &buffers);
@@ -428,27 +424,30 @@ void print_input(struct problem * problem)
 
 }
 
-void print_opencl_info(struct context * context)
+void print_cuda_info(void)
 {
-    cl_int err;
-    char info_string[MAX_INFO_STRING];
+
+    struct cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, 0);
+    check_cuda("Getting device properties");
 
     printf("\n%s\n", STARS);
-    printf("  OpenCL Information\n");
+    printf("  CUDA Information\n");
     printf("%s\n", STARS);
 
     // Print out device name
-    err = clGetDeviceInfo(context->device, CL_DEVICE_NAME, sizeof(info_string), info_string, NULL);
-    check_ocl(err, "Getting device name");
     printf(" Device\n");
-    printf("   %s\n", info_string);
+    printf("   %s\n", prop.name);
     printf("\n");
 
     // Driver version
-    err = clGetDeviceInfo(context->device, CL_DRIVER_VERSION, sizeof(info_string), info_string, NULL);
-    check_ocl(err, "Getting driver version");
+    int driver, runtime;
+    cudaGetDriverVersion(&driver);
+    check_cuda("Getting driver version");
+    cudaGetRuntimeVersion(&runtime);
+    check_cuda("Getting runtime version");
     printf(" Driver\n");
-    printf("   %s\n", info_string);
+    printf("   %d - %d\n", driver, runtime);
     printf("\n");
 }
 
