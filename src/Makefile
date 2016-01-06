@@ -26,11 +26,12 @@ snap: \
 	source.c \
 	sweep.c \
 	ocl_init.c \
-	ocl_buffers.c \
+	cuda_buffers.c \
 	scalar_flux.c \
 	convergence.c \
 	population.c \
-	profiler.c
+	profiler.c \
+	cuda_error.c
 	$(MPI_COMPILER) $^ $(CFLAGS_$(COMPILER)) $(OCL) $(OPTIONS) -o $@
 
 kernels/%.o:	kernels/%.cu
