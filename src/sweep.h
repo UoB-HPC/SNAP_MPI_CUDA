@@ -8,8 +8,8 @@
 #include <stdlib.h>
 
 #include "global.h"
-#include "ocl_global.h"
-#include "ocl_buffers.h"
+#include "cuda_global.h"
+#include "cuda_buffers.h"
 
 /** \brief Structure to hold a 3D cell index for use in storing planes */
 struct cell_id
@@ -32,7 +32,7 @@ struct plane
 void init_planes(struct plane** planes, unsigned int *num_planes, struct problem * problem, struct rankinfo * rankinfo);
 
 /** \brief Copy the array of planes to the OpenCL buffers */
-void copy_planes(const struct plane * planes, const unsigned int num_planes, struct context * context, struct buffers * buffers);
+void copy_planes(const struct plane * planes, const unsigned int num_planes, struct buffers * buffers);
 
 /** \brief Enqueue the kernels to sweep a plane */
 void sweep_plane(const unsigned int z_pos, const int octant, const int istep, const int jstep, const int kstep, const unsigned int plane_num, const struct plane * planes, struct problem * problem, struct rankinfo * rankinfo, struct context * context, struct buffers * buffers);

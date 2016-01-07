@@ -66,7 +66,7 @@ struct buffers
     /** \brief Lists of cell indicies in each plane
     Each buffer is an array of the i,j,k indicies for cells within that plane
     One buffer per plane */
-    double * *planes;
+    struct cell_id ** planes;
 };
 
 /** \brief Allocate global device memory */

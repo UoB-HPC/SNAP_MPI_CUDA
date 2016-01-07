@@ -38,17 +38,19 @@ void init_planes(struct plane** planes, unsigned int *num_planes, struct problem
             }
 }
 
-void copy_planes(const struct plane * planes, const unsigned int num_planes, struct context * context, struct buffers * buffers)
+void copy_planes(const struct plane * planes, const unsigned int num_planes, struct buffers * buffers)
 {
-    buffers->planes = malloc(sizeof(cl_mem)*num_planes);
+    buffers->planes = malloc(sizeof(struct cell_id *)*num_planes);
 
     cl_int err;
     for (unsigned int p = 0; p < num_planes; p++)
     {
-        buffers->planes[p] =
-            clCreateBuffer(context->context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-            sizeof(struct cell_id)*planes[p].num_cells, planes[p].cell_ids, &err);
-        check_ocl(err, "Creating and copying a plane cell indicies buffer");
+        cudaMalloc(&(buffers->planes[p]),
+            sizeof(struct cell_id)*planes[p].num_cells);
+        check_cuda("Creating a plane cell indicies buffer");
+        cudaMemcpy(buffers->planes[p], planes[p].cell_ids,
+            sizeof(struct cell_id)*planes[p].num_cells, cudaMemcpyHostToDevice);
+        check_cuda("Creating and copying a plane cell indicies buffer");
     }
 }
 
