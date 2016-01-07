@@ -94,7 +94,7 @@ void init_velocity_delta(const struct problem * problem, const struct buffers * 
 *
 * Called every outer. Includes the cosine coefficient terms.
 */
-void calculate_dd_coefficients(const struct problem * problem, const struct context * context, const struct buffers * buffers);
+void calculate_dd_coefficients(const struct problem * problem, const struct buffers * buffers);
 
 /** \brief Calculate the denominator to the transport equation update on device (non-blocking)
 *

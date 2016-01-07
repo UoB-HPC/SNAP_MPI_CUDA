@@ -192,8 +192,8 @@ int main(int argc, char **argv)
         //----------------------------------------------
         for (unsigned int o = 0; o < problem.oitm; o++)
         {
-            init_velocity_delta(&problem, &context, &buffers);
-            calculate_dd_coefficients(&problem, &context, &buffers);
+            init_velocity_delta(&problem, &buffers);
+            calculate_dd_coefficients(&problem, &buffers);
             calculate_denominator(&problem, &rankinfo, &context, &buffers);
 
             compute_outer_source(&problem, &rankinfo, &context, &buffers);
