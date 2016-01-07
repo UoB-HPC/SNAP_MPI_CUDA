@@ -123,9 +123,10 @@ void swap_angular_flux_buffers(struct buffers * buffers)
 {
     for (int i = 0; i < 8; i++)
     {
-        cl_mem tmp;
+        double *tmp;
         tmp = buffers->angular_flux_in[i];
         buffers->angular_flux_in[i] = buffers->angular_flux_out[i];
         buffers->angular_flux_out[i] = tmp;
     }
 }
+
