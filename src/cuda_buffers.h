@@ -73,7 +73,7 @@ struct buffers
 void check_device_memory_requirements(struct problem * problem, struct rankinfo * rankinfo, struct context * context);
 
 /** \brief Allocate global device memory */
-void allocate_buffers(struct problem * problem, struct rankinfo * rankinfo, struct context * context, struct buffers * buffers);
+void allocate_buffers(struct problem * problem, struct rankinfo * rankinfo, struct buffers * buffers);
 
 /** \brief Launch a kernel to zero the (1D) buffer (non-blocking) */
 void zero_buffer(struct context * context, double * buffer, size_t offset, size_t size);
