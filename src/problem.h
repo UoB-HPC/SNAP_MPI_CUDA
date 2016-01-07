@@ -10,8 +10,8 @@
 #pragma once
 
 #include "global.h"
-#include "ocl_global.h"
-#include "ocl_buffers.h"
+#include "cuda_global.h"
+#include "cuda_buffers.h"
 
 #include "profiler.h"
 
@@ -44,7 +44,7 @@
 *
 * Set to uniform weights: number of angles divided by eight.
 */
-void init_quadrature_weights(const struct problem * problem, const struct context * context, const struct buffers * buffers);
+void init_quadrature_weights(const struct problem * problem, const struct buffers * buffers);
 
 /** \brief Calculate cosine coefficients
 *

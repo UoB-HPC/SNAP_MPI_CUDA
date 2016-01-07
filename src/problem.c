@@ -4,7 +4,6 @@
 
 void init_quadrature_weights(
     const struct problem * problem,
-    const struct context * context,
     const struct buffers * buffers
     )
 {
@@ -17,10 +16,10 @@ void init_quadrature_weights(
     }
 
     // Copy to device
-    cl_int err;
-    err = clEnqueueWriteBuffer(context->queue, buffers->quad_weights, CL_TRUE,
-        0, sizeof(double)*problem->nang, quad_weights, 0, NULL, NULL);
-    check_ocl(err, "Copying quadrature weights to device");
+    cudaMemcpy(buffers->quad_weights, quad_weights,
+        sizeof(double)*problem->nang,
+        cudaMemcpyHostToDevice);
+    check_cuda("Copying quadrature weights to device");
     free(quad_weights);
 }
 

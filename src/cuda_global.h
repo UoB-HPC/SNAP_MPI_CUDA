@@ -8,6 +8,8 @@
 #include <cuda.h>
 #include <cuda_runtime_api.h>
 
+#include "cuda_kernels.h"
+
 /** \file
 * \brief Basic CUDA routines and global structures
 */
