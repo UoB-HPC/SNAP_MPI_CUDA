@@ -128,12 +128,18 @@ int main(int argc, char **argv)
     // Zero out the angular flux buffers
     for (int oct = 0; oct < 8; oct++)
     {
-        zero_buffer(&context, buffers.angular_flux_in[oct], 0, problem.nang*problem.ng*rankinfo.nx*rankinfo.ny*rankinfo.nz);
-        zero_buffer(&context, buffers.angular_flux_out[oct], 0, problem.nang*problem.ng*rankinfo.nx*rankinfo.ny*rankinfo.nz);
+        cudaMemset(buffers.angular_flux_in[oct], (int)0.0,
+            sizeof(double)*problem.nang*problem.ng*rankinfo.nx*rankinfo.ny*rankinfo.nz);
+        check_cuda("Zeroing angular flux in");
+        cudaMemset(buffers.angular_flux_out[oct], (int)0.0,
+            sizeof(double)*problem.nang*problem.ng*rankinfo.nx*rankinfo.ny*rankinfo.nz);
+        check_cuda("Zeroing angular flux out");
     }
 
     // Zero out the outer source, because later moments are +=
-    zero_buffer(&context, buffers.outer_source, 0, problem.cmom*problem.ng*rankinfo.nx*rankinfo.ny*rankinfo.nz);
+    cudaMemset(buffers.outer_source, (int)0.0, sizeof(double)*problem.cmom*problem.ng*rankinfo.nx*rankinfo.ny*rankinfo.nz);
+    check_cuda("Zeroing outer source");
+
 
     clerr = clFinish(context.queue);
     check_ocl(clerr, "Finish queue at end of setup");
