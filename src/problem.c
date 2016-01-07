@@ -125,7 +125,6 @@ void init_material_data(
 void init_fixed_source(
     const struct problem * problem,
     const struct rankinfo * rankinfo,
-    const struct context * context,
     const struct buffers * buffers
     )
 {
@@ -141,10 +140,9 @@ void init_fixed_source(
                     fixed_source[FIXED_SOURCE_INDEX(g,i,j,k,problem->ng,rankinfo->nx,rankinfo->ny)] = 1.0;
 
     // Copy to device
-    cl_int err;
-    err = clEnqueueWriteBuffer(context->queue, buffers->fixed_source, CL_TRUE,
-        0, sizeof(double)*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz, fixed_source, 0, NULL, NULL);
-    check_ocl(err, "Copying fixed source to device");
+    cudaMemcpy(buffers->fixed_source, fixed_source,
+        sizeof(double)*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz, cudaMemcpyHostToDevice);
+    check_cuda("Copying fixed source to device");
     free(fixed_source);
 }
 
