@@ -24,7 +24,6 @@ void init_quadrature_weights(
 }
 
 void calculate_cosine_coefficients(const struct problem * problem,
-    const struct context * context,
     const struct buffers * buffers,
     double * restrict mu,
     double * restrict eta,
@@ -48,16 +47,12 @@ void calculate_cosine_coefficients(const struct problem * problem,
     }
 
     // Copy to device
-    cl_int err;
-    err = clEnqueueWriteBuffer(context->queue, buffers->mu, CL_FALSE,
-        0, sizeof(double)*problem->nang, mu, 0, NULL, NULL);
-    check_ocl(err, "Copying mu cosine to device");
-    err = clEnqueueWriteBuffer(context->queue, buffers->eta, CL_FALSE,
-        0, sizeof(double)*problem->nang, eta, 0, NULL, NULL);
-    check_ocl(err, "Copying eta cosine to device");
-    err = clEnqueueWriteBuffer(context->queue, buffers->xi, CL_TRUE,
-        0, sizeof(double)*problem->nang, xi, 0, NULL, NULL);
-    check_ocl(err, "Copying xi cosine to device");
+    cudaMemcpy(buffers->mu, mu, sizeof(double)*problem->nang, cudaMemcpyHostToDevice);
+    check_cuda("Copying mu cosine to device");
+    cudaMemcpy(buffers->eta, eta, sizeof(double)*problem->nang, cudaMemcpyHostToDevice);
+    check_cuda("Copying eta cosine to device");
+    cudaMemcpy(buffers->xi, xi, sizeof(double)*problem->nang, cudaMemcpyHostToDevice);
+    check_cuda("Copying xi cosine to device");
 
 }
 
