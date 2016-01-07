@@ -3,11 +3,7 @@ ifndef COMPILER
 	MESSAGE=select a compiler to compiler in OpenMP, e.g. make COMPILER=INTEL
 endif
 
-ifeq ($(shell uname), Darwin)
-	OCL = -framework OpenCL
-else
-	OCL = -lOpenCL
-endif
+CUDA = -lcudart
 
 CFLAGS_			= -O3
 CFLAGS_INTEL	= -O3 -std=c99
@@ -31,7 +27,7 @@ snap: \
 	population.c \
 	profiler.c \
 	cuda_error.c
-	$(MPI_COMPILER) $^ $(CFLAGS_$(COMPILER)) $(OCL) $(OPTIONS) -o $@
+	$(MPI_COMPILER) $^ $(CFLAGS_$(COMPILER)) $(CUDA) $(OPTIONS) -o $@
 
 kernels/%.o:	kernels/%.cu
 	nvcc -c $< -o $@
