@@ -72,9 +72,6 @@ struct buffers
 /** \brief Allocate global device memory */
 void allocate_buffers(struct problem * problem, struct rankinfo * rankinfo, struct buffers * buffers);
 
-/** \brief Launch a kernel to zero the (1D) buffer (non-blocking) */
-void zero_buffer(struct context * context, double * buffer, size_t offset, size_t size);
-
 /** \brief Swap the angular flux pointers around (in <-> out) */
 void swap_angular_flux_buffers(struct buffers * buffers);
 
