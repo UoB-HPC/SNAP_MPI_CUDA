@@ -58,7 +58,6 @@ void calculate_cosine_coefficients(const struct problem * problem,
 
 void calculate_scattering_coefficients(
     const struct problem * problem,
-    const struct context * context,
     const struct buffers * buffers,
     const double * restrict mu,
     const double * restrict eta,
@@ -99,10 +98,10 @@ void calculate_scattering_coefficients(
     }
 
     // Copy to device
-    cl_int err;
-    err = clEnqueueWriteBuffer(context->queue, buffers->scat_coeff, CL_TRUE,
-        0, sizeof(double)*problem->nang*problem->cmom*8, scat_coeff, 0, NULL, NULL);
-    check_ocl(err, "Copying scattering coefficients to device");
+    cudaMemcpy(buffers->scat_coeff, scat_coeff, 
+        sizeof(double)*problem->nang*problem->cmom*8,
+        cudaMemcpyHostToDevice);
+    check_cuda("Copying scattering coefficients to device");
     free(scat_coeff);
 }
 

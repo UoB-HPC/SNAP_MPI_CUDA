@@ -114,7 +114,7 @@ int main(int argc, char **argv)
     // Set up problem
     init_quadrature_weights(&problem, &buffers);
     calculate_cosine_coefficients(&problem, &buffers, memory.mu, memory.eta, memory.xi);
-    calculate_scattering_coefficients(&problem, &context, &buffers, memory.mu, memory.eta, memory.xi);
+    calculate_scattering_coefficients(&problem, &buffers, memory.mu, memory.eta, memory.xi);
     init_material_data(&problem, &context, &buffers, memory.mat_cross_section);
     init_fixed_source(&problem, &rankinfo, &context, &buffers);
     init_scattering_matrix(&problem, &context, &buffers, memory.mat_cross_section);
