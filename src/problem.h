@@ -63,7 +63,7 @@ void calculate_scattering_coefficients(const struct problem * problem, const str
 *
 * We one have one material across the whole grid. Set to 1.0 for the first group, and + 0.01 for each subsequent group.
 */
-void init_material_data(const struct problem * problem, const struct context * context, const struct buffers * buffers,double * restrict mat_cross_section);
+void init_material_data(const struct problem * problem, const struct buffers * buffers,double * restrict mat_cross_section);
 
 /** /brief Set fixed source data
 *
