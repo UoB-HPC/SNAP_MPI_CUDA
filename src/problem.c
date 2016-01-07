@@ -222,7 +222,6 @@ void init_scattering_matrix(
 
 void init_velocities(
     const struct problem * problem,
-    const struct context * context,
     const struct buffers * buffers
     )
 {
@@ -233,10 +232,9 @@ void init_velocities(
         velocities[g] = (double)(problem->ng - g);
 
     // Copy to device
-    cl_int err;
-    err = clEnqueueWriteBuffer(context->queue, buffers->velocities, CL_TRUE,
-        0, sizeof(double)*problem->ng, velocities, 0, NULL, NULL);
-    check_ocl(err, "Copying velocities to device");
+    cudaMemcpy(buffers->velocities, velocities,
+        sizeof(double)*problem->ng, cudaMemcpyHostToDevice);
+    check_cuda("Copying velocities to device");
     free(velocities);
 }
 

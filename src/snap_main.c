@@ -118,7 +118,7 @@ int main(int argc, char **argv)
     init_material_data(&problem, &buffers, memory.mat_cross_section);
     init_fixed_source(&problem, &rankinfo, &buffers);
     init_scattering_matrix(&problem, &buffers, memory.mat_cross_section);
-    init_velocities(&problem, &context, &buffers);
+    init_velocities(&problem, &buffers);
 
     struct plane* planes;
     unsigned int num_planes;
