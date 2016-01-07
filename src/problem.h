@@ -88,7 +88,7 @@ void init_scattering_matrix(const struct problem * problem, const struct buffers
 void init_velocities(const struct problem * problem, const struct buffers * buffers);
 
 /** \brief Set velocity time delta array on device (non-blocking) */
-void init_velocity_delta(const struct problem * problem, const struct context * context, const struct buffers * buffers);
+void init_velocity_delta(const struct problem * problem, const struct buffers * buffers);
 
 /** \brief Calculate the spatial diamond difference coefficients on device (non-blocking)
 *
