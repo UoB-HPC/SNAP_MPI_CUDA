@@ -141,8 +141,8 @@ int main(int argc, char **argv)
     check_cuda("Zeroing outer source");
 
 
-    clerr = clFinish(context.queue);
-    check_ocl(clerr, "Finish queue at end of setup");
+    cudaDeviceSynchronize();
+    check_cuda("Finish queue at end of setup");
 
     if (rankinfo.rank == 0)
         timers.setup_time = wtime() - timers.setup_time;
