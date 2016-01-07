@@ -69,9 +69,6 @@ struct buffers
     double * *planes;
 };
 
-/** \brief Check the device has enough memory to allocate the buffers */
-void check_device_memory_requirements(struct problem * problem, struct rankinfo * rankinfo, struct context * context);
-
 /** \brief Allocate global device memory */
 void allocate_buffers(struct problem * problem, struct rankinfo * rankinfo, struct buffers * buffers);
 

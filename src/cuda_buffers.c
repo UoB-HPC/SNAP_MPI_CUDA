@@ -1,55 +1,6 @@
 
 #include "cuda_buffers.h"
 
-
-void check_device_memory_requirements(
-    struct problem * problem, struct rankinfo * rankinfo,
-    struct context * context)
-{
-    cl_int err;
-    cl_ulong global;
-    err = clGetDeviceInfo(context->device, CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(cl_ulong), &global, NULL);
-    check_ocl(err, "Getting device memory size");
-
-    cl_ulong total = 0;
-    // Add up the memory requirements, in bytes.
-    total += problem->nang*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz*8;
-    total += problem->nang*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz*8;
-    total += problem->nang*problem->ng*rankinfo->ny*rankinfo->nz;
-    total += problem->nang*problem->ng*rankinfo->nx*rankinfo->nz;
-    total += problem->nang*problem->ng*rankinfo->nx*rankinfo->ny;
-    total += problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz;
-    if (problem->cmom-1 == 0)
-        total += problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz;
-    else
-        total += 1;
-    total += problem->nang;
-    total += problem->nang;
-    total += problem->nang;
-    total += problem->nang;
-    total += problem->nang*problem->cmom*8;
-    total += problem->ng;
-    total += problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz;
-    total += problem->cmom*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz;
-    total += problem->cmom*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz;
-    total += problem->nmom*problem->ng*problem->ng;
-    total += 1;
-    total += problem->nang;
-    total += problem->nang;
-    total += problem->ng;
-    total += problem->ng;
-    total += problem->nang*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz;
-    total *= sizeof(double);
-
-    if (global < total)
-    {
-        fprintf(stderr,"Error: Device does not have enough global memory.\n");
-        fprintf(stderr, "Required: %.1f GB\n", (double)total/(1024.0*1024.0*1024.0));
-        fprintf(stderr, "Available: %.1f GB\n", (double)global/(1024.0*1024.0*1024.0));
-        exit(EXIT_FAILURE);
-    }
-}
-
 void allocate_buffers(
     struct problem * problem, struct rankinfo * rankinfo,
     struct buffers * buffers)

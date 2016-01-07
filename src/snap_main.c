@@ -104,7 +104,6 @@ int main(int argc, char **argv)
     if (rankinfo.rank == 0)
         print_cuda_info();
     struct buffers buffers;
-    check_device_memory_requirements(&problem, &rankinfo, &context);
     allocate_buffers(&problem, &rankinfo, &context, &buffers);
 
     // Allocate the problem arrays
