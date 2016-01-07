@@ -117,7 +117,7 @@ int main(int argc, char **argv)
     calculate_scattering_coefficients(&problem, &buffers, memory.mu, memory.eta, memory.xi);
     init_material_data(&problem, &buffers, memory.mat_cross_section);
     init_fixed_source(&problem, &rankinfo, &buffers);
-    init_scattering_matrix(&problem, &context, &buffers, memory.mat_cross_section);
+    init_scattering_matrix(&problem, &buffers, memory.mat_cross_section);
     init_velocities(&problem, &context, &buffers);
 
     struct plane* planes;
