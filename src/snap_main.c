@@ -174,9 +174,14 @@ int main(int argc, char **argv)
         }
 
         // Zero out the scalar flux and flux moments
-        zero_buffer(&context, buffers.scalar_flux, 0, problem.ng*rankinfo.nx*rankinfo.ny*rankinfo.nz);
+        cudaMemset(buffers.scalar_flux, (int)0.0, sizeof(double)*problem.ng*rankinfo.nx*rankinfo.ny*rankinfo.nz);
+        check_cuda("Zero scalar flux");
         if (problem.cmom-1 > 0)
-            zero_buffer(&context, buffers.scalar_flux_moments, 0, (problem.cmom-1)*problem.ng*rankinfo.nx*rankinfo.ny*rankinfo.nz);
+        {
+            cudaMemset(buffers.scalar_flux_moments, (int)0.0, sizeof(double)*(problem.cmom-1)*problem.ng*rankinfo.nx*rankinfo.ny*rankinfo.nz);
+            check_cuda("Zero scalar flux moments");
+        }
+
 
         // Swap angluar flux pointers (not for the first timestep)
         if (t > 0)
