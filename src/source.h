@@ -24,7 +24,7 @@
 * First moment is set to fixed source. Subsequent momemnts
 * use group-to-group scattering.
 */
-void compute_outer_source(const struct problem * problem, const struct rankinfo * rankinfo, struct context * context, struct buffers * buffers);
+void compute_outer_source(const struct problem * problem, const struct rankinfo * rankinfo, struct buffers * buffers);
 
 /** \brief Compute the inner source on the device (non-blocking)
 *
