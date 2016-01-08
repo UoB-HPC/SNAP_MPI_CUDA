@@ -207,7 +207,7 @@ int main(int argc, char **argv)
             unsigned int i;
             for (i = 0; i < problem.iitm; i++)
             {
-                compute_inner_source(&problem, &rankinfo, &context, &buffers);
+                compute_inner_source(&problem, &rankinfo, &buffers);
 
                 // Get the scalar flux back
                 copy_back_scalar_flux(&problem, &rankinfo, &context, &buffers, memory.old_inner_scalar_flux, CL_FALSE);

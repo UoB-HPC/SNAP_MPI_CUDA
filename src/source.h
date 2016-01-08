@@ -30,4 +30,4 @@ void compute_outer_source(const struct problem * problem, const struct rankinfo 
 *
 * Set to the outer source plus within group scattering based on scalar flux and scalar flux moments.
 */
-void compute_inner_source(const struct problem * problem, const struct rankinfo * rankinfo, struct context * context, struct buffers * buffers);
+void compute_inner_source(const struct problem * problem, const struct rankinfo * rankinfo, struct buffers * buffers);
