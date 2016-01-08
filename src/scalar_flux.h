@@ -22,4 +22,4 @@ void compute_scalar_flux_moments(struct problem * problem, struct rankinfo * ran
 
 
 /** \brief Copy the scalar flux back to the host (choose blocking) */
-void copy_back_scalar_flux(struct problem *problem, struct rankinfo * rankinfo, struct context * context, struct buffers * buffers, double * scalar_flux, cl_bool blocking);
+void copy_back_scalar_flux(struct problem *problem, struct rankinfo * rankinfo, struct buffers * buffers, double * scalar_flux);

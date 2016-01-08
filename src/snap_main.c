@@ -199,7 +199,7 @@ int main(int argc, char **argv)
             compute_outer_source(&problem, &rankinfo, &buffers);
 
             // Get the scalar flux back
-            copy_back_scalar_flux(&problem, &rankinfo, &context, &buffers, memory.old_outer_scalar_flux, CL_FALSE);
+            copy_back_scalar_flux(&problem, &rankinfo, &buffers, memory.old_outer_scalar_flux);
 
             //----------------------------------------------
             // Inners

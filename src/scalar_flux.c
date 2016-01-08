@@ -107,15 +107,12 @@ void compute_scalar_flux_moments(
 void copy_back_scalar_flux(
     struct problem *problem,
     struct rankinfo * rankinfo,
-    struct context * context,
     struct buffers * buffers,
-    double * scalar_flux,
-    cl_bool blocking
+    double * scalar_flux
     )
 {
-    cl_int err;
-    err = clEnqueueReadBuffer(context->copy_queue, buffers->scalar_flux, blocking,
-        0, sizeof(double)*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz, scalar_flux,
-        0, NULL, NULL);
-    check_ocl(err, "Copying back scalar flux");
+    cudaMemcpy(scalar_flux, buffers->scalar_flux,
+        sizeof(double)*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz,
+    cudaMemcpyDeviceToHost);
+    check_cuda("Copying back scalar flux");
 }
