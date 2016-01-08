@@ -266,30 +266,19 @@ void calculate_dd_coefficients(
 void calculate_denominator(
     const struct problem * problem,
     const struct rankinfo * rankinfo,
-    const struct context * context,
     const struct buffers * buffers
     )
 {
     // We do this on the device because SNAP does it every outer
-    cl_int err;
-    err = clSetKernelArg(context->kernels.calc_denominator, 0, sizeof(unsigned int), &rankinfo->nx);
-    err |= clSetKernelArg(context->kernels.calc_denominator, 1, sizeof(unsigned int), &rankinfo->ny);
-    err |= clSetKernelArg(context->kernels.calc_denominator, 2, sizeof(unsigned int), &rankinfo->nz);
-    err |= clSetKernelArg(context->kernels.calc_denominator, 3, sizeof(unsigned int), &problem->nang);
-    err |= clSetKernelArg(context->kernels.calc_denominator, 4, sizeof(unsigned int), &problem->ng);
-    err |= clSetKernelArg(context->kernels.calc_denominator, 5, sizeof(cl_mem), &buffers->mat_cross_section);
-    err |= clSetKernelArg(context->kernels.calc_denominator, 6, sizeof(cl_mem), &buffers->velocity_delta);
-    err |= clSetKernelArg(context->kernels.calc_denominator, 7, sizeof(cl_mem), &buffers->mu);
-    err |= clSetKernelArg(context->kernels.calc_denominator, 8, sizeof(cl_mem), &buffers->dd_i);
-    err |= clSetKernelArg(context->kernels.calc_denominator, 9, sizeof(cl_mem), &buffers->dd_j);
-    err |= clSetKernelArg(context->kernels.calc_denominator, 10, sizeof(cl_mem), &buffers->dd_k);
-    err |= clSetKernelArg(context->kernels.calc_denominator, 11, sizeof(cl_mem), &buffers->denominator);
-    check_ocl(err, "Setting denominator kernel arguments");
-
-    size_t global[] = {problem->nang, problem->ng};
-    err = clEnqueueNDRangeKernel(context->queue,
-        context->kernels.calc_denominator,
-        2, 0, global, NULL,
-        0, NULL, &denominator_event);
-    check_ocl(err, "Enqueue denominator kernel");
+    dim3 grid(problem->nang, problem->ng, 1);
+    dim3 threads(1, 1, 1);
+    calc_denominator<<< grid, threads >>>(
+        rankinfo->nx, rankinfo->ny, rankinfo->nz,
+        problem->nang, problem->ng,
+        buffers->mat_cross_section, buffers->velocity_delta,
+        buffers->mu, buffers->dd_i, buffers->dd_j, buffers->dd_k,
+        buffers->denominator
+    );
+    check_cuda("Enqueue denominator kernel");
 }
+
