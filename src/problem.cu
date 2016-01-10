@@ -8,7 +8,7 @@ void init_quadrature_weights(
     )
 {
     // Create tempoary on host for quadrature weights
-    double *quad_weights = malloc(sizeof(double)*problem->nang);
+    double *quad_weights = (double *)malloc(sizeof(double)*problem->nang);
     // Uniform weights
     for (unsigned int a = 0; a < problem->nang; a++)
     {
@@ -25,9 +25,9 @@ void init_quadrature_weights(
 
 void calculate_cosine_coefficients(const struct problem * problem,
     const struct buffers * buffers,
-    double * restrict mu,
-    double * restrict eta,
-    double * restrict xi
+    double * __restrict__ mu,
+    double * __restrict__ eta,
+    double * __restrict__ xi
     )
 {
 
@@ -59,13 +59,13 @@ void calculate_cosine_coefficients(const struct problem * problem,
 void calculate_scattering_coefficients(
     const struct problem * problem,
     const struct buffers * buffers,
-    const double * restrict mu,
-    const double * restrict eta,
-    const double * restrict xi
+    const double * __restrict__ mu,
+    const double * __restrict__ eta,
+    const double * __restrict__ xi
     )
 {
     // Allocate temporary on host for scattering coefficients
-    double *scat_coeff = malloc(sizeof(double)*problem->nang*problem->cmom*8);
+    double *scat_coeff = (double *)malloc(sizeof(double)*problem->nang*problem->cmom*8);
     // (mu*eta*xi)^l starting at 0
     for (int id = 0; id < 2; id++)
     {
@@ -108,7 +108,7 @@ void calculate_scattering_coefficients(
 void init_material_data(
     const struct problem * problem,
     const struct buffers * buffers,
-    double * restrict mat_cross_section
+    double * __restrict__ mat_cross_section
     )
 {
     mat_cross_section[0] = 1.0;
@@ -129,7 +129,7 @@ void init_fixed_source(
     )
 {
     // Allocate temporary array for fixed source
-    double *fixed_source = malloc(sizeof(double)*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz);
+    double *fixed_source = (double *)malloc(sizeof(double)*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz);
 
     // Source everywhere, set at strength 1.0
     // This is src_opt == 0 in original SNAP
@@ -149,11 +149,11 @@ void init_fixed_source(
 void init_scattering_matrix(
     const struct problem * problem,
     const struct buffers * buffers,
-    const double * restrict mat_cross_section
+    const double * __restrict__ mat_cross_section
     )
 {
     // Allocate temporary array for scattering matrix
-    double *scattering_matrix = malloc(sizeof(double)*problem->nmom*problem->ng*problem->ng);
+    double *scattering_matrix = (double *)malloc(sizeof(double)*problem->nmom*problem->ng*problem->ng);
 
     // 10% up scattering
     // 20% in group scattering
@@ -226,7 +226,7 @@ void init_velocities(
     )
 {
     // Allocate tempoary array for velocities
-    double *velocities = malloc(sizeof(double)*problem->ng);
+    double *velocities = (double *)malloc(sizeof(double)*problem->ng);
 
     for (unsigned int g = 0; g < problem->ng; g++)
         velocities[g] = (double)(problem->ng - g);

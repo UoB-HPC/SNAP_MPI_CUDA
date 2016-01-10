@@ -13,7 +13,7 @@
 #include "cuda_global.h"
 #include "cuda_buffers.h"
 
-#include "profiler.h"
+//#include "profiler.h"
 
 /** @defgroup MEM Memory access patterns
 * \brief Macros for indexing multi-dimensional arrays
@@ -50,20 +50,20 @@ void init_quadrature_weights(const struct problem * problem, const struct buffer
 *
 * Populates the \a mu, \a eta and \a xi arrays.
 */
-void calculate_cosine_coefficients(const struct problem * problem, const struct buffers * buffers, double * restrict mu, double * restrict eta, double * restrict xi);
+void calculate_cosine_coefficients(const struct problem * problem, const struct buffers * buffers, double * __restrict__ mu, double * __restrict__ eta, double * __restrict__ xi);
 
 /** \brief Calculate the scattering coefficients
 *
 * Populates the \a scat_coef array based on the cosine coefficients.
 * Set as \f$(\mu*\eta*\xi)^l\f$ starting at 0, for the lth moment.
 */
-void calculate_scattering_coefficients(const struct problem * problem, const struct buffers * buffers, const double * restrict mu, const double * restrict eta, const double * restrict xi);
+void calculate_scattering_coefficients(const struct problem * problem, const struct buffers * buffers, const double * __restrict__ mu, const double * __restrict__ eta, const double * __restrict__ xi);
 
 /** \brief Set material cross sections
 *
 * We one have one material across the whole grid. Set to 1.0 for the first group, and + 0.01 for each subsequent group.
 */
-void init_material_data(const struct problem * problem, const struct buffers * buffers,double * restrict mat_cross_section);
+void init_material_data(const struct problem * problem, const struct buffers * buffers,double * __restrict__ mat_cross_section);
 
 /** /brief Set fixed source data
 *
@@ -78,7 +78,7 @@ void init_fixed_source(const struct problem * problem, const struct rankinfo * r
 * except first and last which have no up/down scattering.
 * Data is initilised for all moments.
 */
-void init_scattering_matrix(const struct problem * problem, const struct buffers * buffers, const double * restrict mat_cross_section);
+void init_scattering_matrix(const struct problem * problem, const struct buffers * buffers, const double * __restrict__ mat_cross_section);
 
 
 /** \brief Set velocities array
