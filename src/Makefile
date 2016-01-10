@@ -20,7 +20,7 @@ snap: \
 	comms.c \
 	problem.o \
 	source.c \
-	sweep.c \
+	sweep.o \
 	cuda_buffers.c \
 	scalar_flux.c \
 	convergence.c \
