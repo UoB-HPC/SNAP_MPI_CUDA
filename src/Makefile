@@ -18,7 +18,7 @@ snap: \
 	input.c \
 	allocate.c \
 	comms.c \
-	problem.c \
+	problem.o \
 	source.c \
 	sweep.c \
 	cuda_buffers.c \
