@@ -43,8 +43,7 @@ KERNEL_HEADER_FILES=\
 	kernels/reduce_flux.o \
 	kernels/reduce_flux_moments.o
 
-ocl_init.c:	$(KERNEL_HEADER_FILES)
-	@touch ocl_init.c
+snap:	$(KERNEL_HEADER_FILES)
 
 .PHONY: clean
 
