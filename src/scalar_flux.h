@@ -9,8 +9,8 @@
 
 #include "global.h"
 
-#include "ocl_global.h"
-#include "ocl_buffers.h"
+#include "cuda_global.h"
+#include "cuda_buffers.h"
 
 #include "profiler.h"
 
