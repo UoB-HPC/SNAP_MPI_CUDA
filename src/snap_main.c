@@ -210,19 +210,15 @@ int main(int argc, char **argv)
                 compute_inner_source(&problem, &rankinfo, &buffers);
 
                 // Get the scalar flux back
-                copy_back_scalar_flux(&problem, &rankinfo, &context, &buffers, memory.old_inner_scalar_flux, CL_FALSE);
-                // Put a marker on the copy queue
-                cl_event inner_copy_event;
-                clerr = clEnqueueMarker(context.copy_queue, &inner_copy_event);
-                check_ocl(clerr, "Putting marker on copy queue");
+                copy_back_scalar_flux(&problem, &rankinfo, &buffers, memory.old_inner_scalar_flux);
 
                 double sweep_tick;
                 if (profiling && rankinfo.rank == 0)
                 {
                     // We must wait for the transfer to finish before we enqueue the next transfer,
                     // or MPI_Recv to get accurate timings
-                    clerr = clFinish(context.queue);
-                    check_ocl(clerr, "Finish queue just before sweep for profiling");
+                    cudaDeviceSynchronize();
+                    check_cuda("Finish queue just before sweep for profiling");
                     sweep_tick = wtime();
                 }
 
@@ -233,19 +229,19 @@ int main(int argc, char **argv)
                         for (int kstep = -1; kstep < 2; kstep += 2)
                         {
                             // Zero the z buffer every octant - we just do KBA
-                            zero_buffer(&context, buffers.flux_k, 0, problem.nang*problem.ng*rankinfo.nx*rankinfo.ny);
-
+                            cudaMemset(buffers.flux_k, (int)0.0, sizeof(double)*problem.nang*problem.ng*rankinfo.nx*rankinfo.ny);
+                            check_cuda("Setting flux k to zero");
 
                             for (unsigned int z_pos = 0; z_pos < rankinfo.nz; z_pos += problem.chunk)
                             {
                                 double tick = wtime();
-                                recv_boundaries(z_pos, octant, istep, jstep, kstep, &problem, &rankinfo, &memory, &context, &buffers);
+                                recv_boundaries(z_pos, octant, istep, jstep, kstep, &problem, &rankinfo, &memory, &buffers);
                                 sweep_mpi_recv_time += wtime() - tick;
                                 for (unsigned int p = 0; p < num_planes; p++)
                                 {
                                     sweep_plane(z_pos, octant, istep, jstep, kstep, p, planes, &problem, &rankinfo, &context, &buffers);
                                 }
-                                send_boundaries(z_pos, octant, istep, jstep, kstep, &problem, &rankinfo, &memory, &context, &buffers);
+                                send_boundaries(z_pos, octant, istep, jstep, kstep, &problem, &rankinfo, &memory, &buffers);
                             }
 
                             if (profiling && rankinfo.rank == 0)
