@@ -263,15 +263,8 @@ int main(int argc, char **argv)
                 if (problem.cmom-1 > 0)
                     compute_scalar_flux_moments(&problem, &rankinfo, &buffers);
 
-                // Put a marker on the compute queue
-                cl_event scalar_compute_event;
-                clerr = clEnqueueMarker(context.queue, &scalar_compute_event);
-                check_ocl(clerr, "Enqueue marker on compute queue");
-                clerr = clEnqueueWaitForEvents(context.copy_queue, 1, &scalar_compute_event);
-                check_ocl(clerr, "Enqueue ait on copy queue");
-
                 // Get the new scalar flux back and check inner convergence
-                copy_back_scalar_flux(&problem, &rankinfo, &context, &buffers, memory.scalar_flux, CL_TRUE);
+                copy_back_scalar_flux(&problem, &rankinfo, &buffers, memory.scalar_flux);
 
                 double conv_tick = wtime();
 
@@ -350,8 +343,8 @@ int main(int argc, char **argv)
     // End of Timestep
     //----------------------------------------------
 
-    clerr = clFinish(context.queue);
-    check_ocl(clerr, "Finishing queue before simulation end");
+    cudaDeviceSynchronize();
+    check_cuda("Finishing queue before simulation end");
 
     if (rankinfo.rank == 0)
     {
@@ -362,7 +355,6 @@ int main(int argc, char **argv)
 
     free_memory(&memory);
 
-    release_context(&context);
     finish_comms();
 
     return EXIT_SUCCESS;
@@ -372,7 +364,7 @@ void print_banner(void)
 {
     printf("\n");
     printf(" SNAP: SN (Discrete Ordinates) Application Proxy\n");
-    printf(" MPI+OpenCL port\n");
+    printf(" MPI+CUDA port\n");
     time_t rawtime;
     struct tm * timeinfo;
     char timestring[80];
