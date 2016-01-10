@@ -15,10 +15,10 @@
 #include "profiler.h"
 
 /** \brief Enqueue kernel to compute scalar flux (non-blocking) */
-void compute_scalar_flux(struct problem * problem, struct rankinfo * rankinfo, struct context * context, struct buffers * buffers);
+void compute_scalar_flux(struct problem * problem, struct rankinfo * rankinfo, struct buffers * buffers);
 
 /** \brief Enqueue kernel to compute scalar flux moments (non-blocking) */
-void compute_scalar_flux_moments(struct problem * problem, struct rankinfo * rankinfo, struct context * context, struct buffers * buffers);
+void compute_scalar_flux_moments(struct problem * problem, struct rankinfo * rankinfo, struct buffers * buffers);
 
 
 /** \brief Copy the scalar flux back to the host (choose blocking) */

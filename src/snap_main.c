@@ -257,14 +257,11 @@ int main(int argc, char **argv)
                     timers.sweep_time += wtime() - sweep_tick;
                 }
 
-                // Put barrier on compute queue so we don't update the scalar flux until we know it's back on the host
-                clerr = clEnqueueWaitForEvents(context.queue, 1, &inner_copy_event);
-                check_ocl(clerr, "Enqueue wait on compute queue");
 
                 // Compute the Scalar Flux
-                compute_scalar_flux(&problem, &rankinfo, &context, &buffers);
+                compute_scalar_flux(&problem, &rankinfo, &buffers);
                 if (problem.cmom-1 > 0)
-                    compute_scalar_flux_moments(&problem, &rankinfo, &context, &buffers);
+                    compute_scalar_flux_moments(&problem, &rankinfo, &buffers);
 
                 // Put a marker on the compute queue
                 cl_event scalar_compute_event;
