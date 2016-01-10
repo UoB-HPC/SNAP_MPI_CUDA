@@ -4,7 +4,7 @@
 void init_planes(struct plane** planes, unsigned int *num_planes, struct problem * problem, struct rankinfo * rankinfo)
 {
     *num_planes = rankinfo->nx + rankinfo->ny + problem->chunk - 2;
-    *planes = malloc(sizeof(struct plane) * *num_planes);
+    *planes = (struct plane *)malloc(sizeof(struct plane) * *num_planes);
 
     for (unsigned int p = 0; p < *num_planes; p++)
         (*planes)[p].num_cells = 0;
@@ -19,7 +19,7 @@ void init_planes(struct plane** planes, unsigned int *num_planes, struct problem
 
     for (unsigned int p = 0; p < *num_planes; p++)
     {
-        (*planes)[p].cell_ids = malloc(sizeof(struct cell_id) * (*planes)[p].num_cells);
+        (*planes)[p].cell_ids = (struct cell_id *)malloc(sizeof(struct cell_id) * (*planes)[p].num_cells);
     }
 
     unsigned int index[*num_planes];
@@ -40,9 +40,8 @@ void init_planes(struct plane** planes, unsigned int *num_planes, struct problem
 
 void copy_planes(const struct plane * planes, const unsigned int num_planes, struct buffers * buffers)
 {
-    buffers->planes = malloc(sizeof(struct cell_id *)*num_planes);
+    buffers->planes = (struct cell_id **)malloc(sizeof(struct cell_id *)*num_planes);
 
-    cl_int err;
     for (unsigned int p = 0; p < num_planes; p++)
     {
         cudaMalloc(&(buffers->planes[p]),
