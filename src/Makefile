@@ -19,7 +19,7 @@ snap: \
 	allocate.c \
 	comms.c \
 	problem.o \
-	source.c \
+	source.o \
 	sweep.o \
 	cuda_buffers.c \
 	scalar_flux.c \
