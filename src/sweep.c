@@ -74,7 +74,7 @@ void sweep_plane(
     dim3 blocks(problem->nang*problem->ng, planes[plane].num_cells, 1);
     dim3 threads(1, 1, 1);
 
-    sweep_plane<<< blocks, threads >>>(
+    sweep_plane_kernel<<< blocks, threads >>>(
         rankinfo->nx, rankinfo->ny, rankinfo->nz,
         problem->nang, problem->ng, problem->cmom,
         istep, jstep, kstep, octant, z_pos,

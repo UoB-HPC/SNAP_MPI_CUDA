@@ -139,7 +139,7 @@ void reduce_flux_moments(
 );
 
 __global__
-void sweep_plane(
+void sweep_plane_kernel(
     const unsigned int nx,
     const unsigned int ny,
     const unsigned int nz,

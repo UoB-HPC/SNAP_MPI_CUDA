@@ -23,7 +23,7 @@ struct cell_id
 #define denominator(a,g,i,j,k) denominator[DENOMINATOR_INDEX((a),(g),(i),(j),(k),nang,ng,nx,ny)]
 
 
-__global__ void sweep_plane(
+__global__ void sweep_plane_kernel(
     const unsigned int nx,
     const unsigned int ny,
     const unsigned int nz,
