@@ -239,7 +239,7 @@ int main(int argc, char **argv)
                                 sweep_mpi_recv_time += wtime() - tick;
                                 for (unsigned int p = 0; p < num_planes; p++)
                                 {
-                                    sweep_plane(z_pos, octant, istep, jstep, kstep, p, planes, &problem, &rankinfo, &context, &buffers);
+                                    sweep_plane(z_pos, octant, istep, jstep, kstep, p, planes, &problem, &rankinfo, &buffers);
                                 }
                                 send_boundaries(z_pos, octant, istep, jstep, kstep, &problem, &rankinfo, &memory, &buffers);
                             }
