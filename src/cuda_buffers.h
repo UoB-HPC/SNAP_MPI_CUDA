@@ -20,7 +20,9 @@ struct buffers
 
     /** @{
     \brief Edge flux arrays */
-    double * flux_i, flux_j, flux_k;
+    double * flux_i;
+    double * flux_j;
+    double * flux_k;
     /** @} */
 
     /** @{ \brief Scalar flux arrays */
@@ -32,7 +34,9 @@ struct buffers
     double * quad_weights;
 
     /** @{ \brief Cosine coefficients */
-    double * mu, eta, xi;
+    double * mu;
+    double * eta;
+    double * xi;
     /** @} */
 
     /** \brief Scattering coefficient */
@@ -51,7 +55,9 @@ struct buffers
     double * scattering_matrix;
 
     /** @{ \brief Diamond diference co-efficients */
-    double * dd_i, dd_j, dd_k;
+    double * dd_i;
+    double * dd_j;
+    double * dd_k;
     /** @} */
 
     /** \brief Mock velocities array */
