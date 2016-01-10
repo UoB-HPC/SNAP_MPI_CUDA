@@ -29,9 +29,8 @@ snap: \
 	cuda_error.c
 	$(MPI_COMPILER) $^ $(CFLAGS_$(COMPILER)) $(CUDA) $(OPTIONS) -o $@
 
-kernels/%.o:	kernels/%.cu
+%.o:	%.cu
 	nvcc -c $< -o $@
-
 
 KERNEL_HEADER_FILES=\
 	kernels/calc_velocity_delta.o \
