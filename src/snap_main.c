@@ -244,8 +244,10 @@ int main(int argc, char **argv)
                                 send_boundaries(z_pos, octant, istep, jstep, kstep, &problem, &rankinfo, &memory, &buffers);
                             }
 
+/*
                             if (profiling && rankinfo.rank == 0)
                                 chunk_profiler(&timers);
+*/
 
                             octant += 1;
                         }
@@ -274,8 +276,10 @@ int main(int argc, char **argv)
                     timers.convergence_time += wtime() - conv_tick;
 
                 // Do any profiler updates for timings
+/*
                 if (rankinfo.rank == 0)
                     inner_profiler(&timers, &problem);
+*/
 
                 if (innerdone)
                 {
@@ -303,8 +307,10 @@ int main(int argc, char **argv)
                 printf("     %-9u %-15lf %-10u\n", o, max_outer_diff, i);
 
             // Do any profiler updates for timings
+/*
             if (rankinfo.rank == 0)
                 outer_profiler(&timers);
+*/
 
             if (outerdone)
                 break;
