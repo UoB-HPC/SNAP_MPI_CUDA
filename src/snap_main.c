@@ -309,10 +309,8 @@ int main(int argc, char **argv)
                 printf("     %-9u %-15lf %-10u\n", o, max_outer_diff, i);
 
             // Do any profiler updates for timings
-/*
             if (rankinfo.rank == 0)
                 outer_profiler(&timers);
-*/
 
             if (outerdone)
                 break;

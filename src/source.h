@@ -11,6 +11,8 @@
 #include "cuda_global.h"
 #include "cuda_buffers.h"
 
+#include "profiler.h"
+
 /** \ingroup MEM
 * @{
 * \brief Index for source arrays */
