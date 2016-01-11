@@ -25,7 +25,7 @@ snap: \
 	scalar_flux.o \
 	convergence.c \
 	population.c \
-	profiler.c \
+	# profiler.c \
 	cuda_error.c
 	$(MPI_COMPILER) $^ $(CFLAGS_$(COMPILER)) $(CUDA) $(OPTIONS) -o $@
 
@@ -47,4 +47,5 @@ snap:	$(KERNEL_HEADER_FILES)
 .PHONY: clean
 
 clean:
-	rm -f snap kernels/*.o
+	rm -f snap kernels/*.o *.o
+
