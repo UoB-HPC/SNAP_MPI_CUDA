@@ -5,7 +5,6 @@ void allocate_buffers(
     struct problem * problem, struct rankinfo * rankinfo,
     struct buffers * buffers)
 {
-    cl_int err;
 
     // Angular flux
     for (int i = 0; i < 8; i++)
