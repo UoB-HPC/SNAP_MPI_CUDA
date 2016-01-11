@@ -39,6 +39,10 @@
 
 /**@}*/
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /** \brief Initilise quadrature weights
 *
@@ -101,4 +105,8 @@ void calculate_dd_coefficients(const struct problem * problem, const struct buff
 * Called every outer.
 */
 void calculate_denominator(const struct problem * problem, const struct rankinfo * rankinfo, const struct buffers * buffers);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 

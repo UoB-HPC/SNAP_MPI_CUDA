@@ -28,6 +28,11 @@ struct plane
     struct cell_id * cell_ids;
 };
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** \brief Create a list of cell indexes in the planes in the XY plane determined by chunk */
 void init_planes(struct plane** planes, unsigned int *num_planes, struct problem * problem, struct rankinfo * rankinfo);
 
@@ -36,4 +41,8 @@ void copy_planes(const struct plane * planes, const unsigned int num_planes, str
 
 /** \brief Enqueue the kernels to sweep a plane */
 void sweep_plane(const unsigned int z_pos, const int octant, const int istep, const int jstep, const int kstep, const unsigned int plane, const struct plane * planes, struct problem * problem, struct rankinfo * rankinfo, struct buffers * buffers);
+
+#ifdef __cplusplus
+}
+#endif
 

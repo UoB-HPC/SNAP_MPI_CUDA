@@ -9,7 +9,6 @@
 #include <sys/time.h>
 #include <stdbool.h>
 #include "global.h"
-#include "ocl_global.h"
 
 static const bool profiling = true;
 
@@ -46,24 +45,6 @@ struct timers
 
 extern double sweep_mpi_time;
 extern double sweep_mpi_recv_time;
-
-
-/** @{ \brief OpenCL Events used to later read compute timings if profiling is on */
-cl_event outer_source_event;
-cl_event inner_source_event;
-
-cl_event scalar_flux_event;
-cl_event scalar_flux_moments_event;
-
-cl_event velocity_delta_event;
-cl_event denominator_event;
-
-cl_event flux_i_read_event;
-cl_event flux_j_read_event;
-cl_event flux_i_write_event;
-cl_event flux_j_write_event;
-
-/** @} */
 
 /** \brief Get the current wallclock time */
 double wtime(void);
