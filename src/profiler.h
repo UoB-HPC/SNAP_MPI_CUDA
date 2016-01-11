@@ -46,6 +46,11 @@ struct timers
 extern double sweep_mpi_time;
 extern double sweep_mpi_recv_time;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** \brief Get the current wallclock time */
 double wtime(void);
 
@@ -57,4 +62,8 @@ void inner_profiler(struct timers * timers, struct problem * problem);
 
 /** \brief Update the timers every chunk with transfer times */
 void chunk_profiler(struct timers * timers);
+
+#ifdef __cplusplus
+}
+#endif
 
