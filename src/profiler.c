@@ -8,6 +8,8 @@ double wtime(void)
     return t.tv_sec + t.tv_usec * 1.0E-6;
 }
 
+/*
+
 void outer_profiler(struct timers * timers)
 {
     if (!profiling)
@@ -116,4 +118,6 @@ void chunk_profiler(struct timers * timers)
         timers->sweep_transfer_time += (double)(tock - tick) * 1.0E-9;
     }
 }
+
+*/
 

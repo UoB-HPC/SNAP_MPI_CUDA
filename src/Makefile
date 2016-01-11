@@ -25,6 +25,7 @@ snap: \
 	scalar_flux.o \
 	convergence.c \
 	population.c \
+	profiler.c \
 	cuda_error.c
 	$(MPI_COMPILER) $^ $(CFLAGS_$(COMPILER)) $(CUDA) $(OPTIONS) -o $@
 
