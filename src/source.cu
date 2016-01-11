@@ -5,7 +5,6 @@
 void compute_outer_source(
     const struct problem * problem,
     const struct rankinfo * rankinfo,
-    struct context * context,
     struct buffers * buffers
     )
 {
