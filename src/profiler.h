@@ -92,6 +92,12 @@ void inner_profiler(struct timers * timers, struct problem * problem);
 /** \brief Update the timers every chunk with transfer times */
 void chunk_profiler(struct timers * timers);
 
+/** \brief Create event objects (only used once) */
+void create_events(void);
+
+/** \brief Destroy event objects (only used once) */
+void destroy_events(void);
+
 #ifdef __cplusplus
 }
 #endif

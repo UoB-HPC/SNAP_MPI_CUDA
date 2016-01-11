@@ -54,6 +54,8 @@ int main(int argc, char **argv)
     struct timers timers;
     timers.setup_time = wtime();
 
+    create_events();
+
     int rank, size;
     mpi_err = MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     check_mpi(mpi_err, "Getting MPI rank");
@@ -358,6 +360,8 @@ int main(int argc, char **argv)
 
         print_timing_report(&timers, &problem, total_iterations);
     }
+
+    destroy_events();
 
     free_memory(&memory);
 
