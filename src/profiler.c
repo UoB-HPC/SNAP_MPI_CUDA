@@ -46,25 +46,19 @@ void inner_profiler(struct timers * timers, struct problem * problem)
 
     // Get inner source update times
     cudaEventElapsedTime(&time, inner_source_event_start, inner_source_event_stop);
-    check_cuda("Cetting inner source time");
+    check_cuda("Getting inner source time");
     timers->inner_source_time += (double)(time) * 1.0E-3;
 
-/*
     // Get scalar flux reduction times
-    err = clGetEventProfilingInfo(scalar_flux_event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &tick, NULL);
-    check_ocl(err, "Getting scalar flux start time");
-    err = clGetEventProfilingInfo(scalar_flux_event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &tock, NULL);
-    check_ocl(err, "Getting scalar flux end time");
-    timers->reduction_time += (double)(tock - tick) * 1.0E-9;
+    cudaEventElapsedTime(&time, scalar_flux_event_start, scalar_flux_event_stop);
+    check_cuda("Getting scalar flux time");
+    timers->reduction_time += (double)(time) * 1.0E-3;
     if (problem->cmom-1 > 0)
     {
-        err = clGetEventProfilingInfo(scalar_flux_moments_event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &tick, NULL);
-        check_ocl(err, "Getting scalar flux moments start time");
-        err = clGetEventProfilingInfo(scalar_flux_moments_event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &tock, NULL);
-        check_ocl(err, "Getting scalar flux moments end time");
-        timers->reduction_time += (double)(tock - tick) * 1.0E-9;
+        cudaEventElapsedTime(&time, scalar_flux_moments_event_start, scalar_flux_moments_event_stop);
+        check_cuda("Getting scalar flux moments time");
+        timers->reduction_time += (double)(time) * 1.0E-3;
     }
-*/
 }
 
 /*

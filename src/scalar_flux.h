@@ -12,7 +12,7 @@
 #include "cuda_global.h"
 #include "cuda_buffers.h"
 
-//#include "profiler.h"
+#include "profiler.h"
 
 #ifdef __cplusplus
 extern "C"
