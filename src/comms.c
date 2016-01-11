@@ -119,7 +119,7 @@ void recv_boundaries(int z_pos, const int octant, const int istep, const int jst
     if ( (istep == -1 && rankinfo->iub == problem->nx)
         || (istep == 1 && rankinfo->ilb == 0))
     {
-        cudaMemset(buffers->flux_i+i_offset, sizeof(double)*problem->nang*problem->ng*rankinfo->ny*problem->chunk);
+        cudaMemset(buffers->flux_i+i_offset, (int)0.0, sizeof(double)*problem->nang*problem->ng*rankinfo->ny*problem->chunk);
         check_cuda("Zeroing flux i with offset");
     }
     // Otherwise, internal boundary - get data from MPI receives
