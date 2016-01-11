@@ -171,48 +171,48 @@ void create_events(void)
 
 void destroy_events(void)
 {
-    cudaEventDestroy(&outer_source_event_start);
+    cudaEventDestroy(outer_source_event_start);
     check_cuda("Creating outer source event start");
-    cudaEventDestroy(&outer_source_event_stop);
+    cudaEventDestroy(outer_source_event_stop);
     check_cuda("Creating outer source event stop");
-    cudaEventDestroy(&inner_source_event_start);
+    cudaEventDestroy(inner_source_event_start);
     check_cuda("Creating inner source event start");
-    cudaEventDestroy(&inner_source_event_stop);
+    cudaEventDestroy(inner_source_event_stop);
     check_cuda("Creating inner source event stop");
 
-    cudaEventDestroy(&scalar_flux_event_start);
+    cudaEventDestroy(scalar_flux_event_start);
     check_cuda("Creating scalar flux event start");
-    cudaEventDestroy(&scalar_flux_event_stop);
+    cudaEventDestroy(scalar_flux_event_stop);
     check_cuda("Creating scalar flux event stop");
-    cudaEventDestroy(&scalar_flux_moments_event_start);
+    cudaEventDestroy(scalar_flux_moments_event_start);
     check_cuda("Creating scalar flux moments event start");
-    cudaEventDestroy(&scalar_flux_moments_event_stop);
+    cudaEventDestroy(scalar_flux_moments_event_stop);
     check_cuda("Creating scalar flux moments event stop");
 
-    cudaEventDestroy(&velocity_delta_event_start);
+    cudaEventDestroy(velocity_delta_event_start);
     check_cuda("Creating velocity delta event start");
-    cudaEventDestroy(&velocity_delta_event_stop);
+    cudaEventDestroy(velocity_delta_event_stop);
     check_cuda("Creating velocity delta event stop");
-    cudaEventDestroy(&denominator_event_start);
+    cudaEventDestroy(denominator_event_start);
     check_cuda("Creating denoninator event start");
-    cudaEventDestroy(&denominator_event_stop);
+    cudaEventDestroy(denominator_event_stop);
     check_cuda("Creating denoninator event stop");
 
-    cudaEventDestroy(&flux_i_read_event_start);
+    cudaEventDestroy(flux_i_read_event_start);
     check_cuda("Creating flux i read event start");
-    cudaEventDestroy(&flux_i_read_event_stop);
+    cudaEventDestroy(flux_i_read_event_stop);
     check_cuda("Creating flux i read event stop");
-    cudaEventDestroy(&flux_j_read_event_start);
+    cudaEventDestroy(flux_j_read_event_start);
     check_cuda("Creating flux j read event start");
-    cudaEventDestroy(&flux_j_read_event_stop);
+    cudaEventDestroy(flux_j_read_event_stop);
     check_cuda("Creating flux j read event stop");
-    cudaEventDestroy(&flux_i_write_event_start);
+    cudaEventDestroy(flux_i_write_event_start);
     check_cuda("Creating flux i write event start");
-    cudaEventDestroy(&flux_i_write_event_stop);
+    cudaEventDestroy(flux_i_write_event_stop);
     check_cuda("Creating flux i write event stop");
-    cudaEventDestroy(&flux_j_write_event_start);
+    cudaEventDestroy(flux_j_write_event_start);
     check_cuda("Creating flux j write event start");
-    cudaEventDestroy(&flux_j_write_event_stop);
+    cudaEventDestroy(flux_j_write_event_stop);
     check_cuda("Creating flux j write event stop");
 }
 
