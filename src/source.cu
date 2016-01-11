@@ -36,6 +36,10 @@ void compute_inner_source(
 {
     dim3 grid(rankinfo->nx, rankinfo->ny, rankinfo->nz);
     dim3 threads(1, 1, 1);
+
+    cudaEventRecord(inner_source_event_start);
+    check_cuda("Recording inner source start event");
+
     calc_inner_source<<< grid, threads >>>(
         rankinfo->nx, rankinfo->ny, rankinfo->nz,
         problem->ng, problem->cmom, problem->nmom,
@@ -44,5 +48,8 @@ void compute_inner_source(
         buffers->inner_source
     );
     check_cuda("Enqueue inner source kernel");
+
+    cudaEventRecord(inner_source_event_stop);
+    check_cuda("Recording inner source stop event");
 }
 

@@ -34,25 +34,22 @@ void outer_profiler(struct timers * timers)
 */
 }
 
-/*
+
 
 void inner_profiler(struct timers * timers, struct problem * problem)
 {
     if (!profiling)
         return;
 
-    cl_int err;
-
-    // Times are in nanoseconds
-    cl_ulong tick, tock;
+    // Times are in milliseconds
+    float time;
 
     // Get inner source update times
-    err = clGetEventProfilingInfo(inner_source_event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &tick, NULL);
-    check_ocl(err, "Getting inner source start time");
-    err = clGetEventProfilingInfo(inner_source_event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &tock, NULL);
-    check_ocl(err, "Getting inner source end time");
-    timers->inner_source_time += (double)(tock - tick) * 1.0E-9;
+    cudaEventElapsedTime(&time, inner_source_event_start, inner_source_event_stop);
+    check_cuda("Cetting inner source time");
+    timers->inner_source_time += (double)(time) * 1.0E-3;
 
+/*
     // Get scalar flux reduction times
     err = clGetEventProfilingInfo(scalar_flux_event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &tick, NULL);
     check_ocl(err, "Getting scalar flux start time");
@@ -67,8 +64,10 @@ void inner_profiler(struct timers * timers, struct problem * problem)
         check_ocl(err, "Getting scalar flux moments end time");
         timers->reduction_time += (double)(tock - tick) * 1.0E-9;
     }
+*/
 }
 
+/*
 
 void chunk_profiler(struct timers * timers)
 {

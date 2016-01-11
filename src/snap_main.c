@@ -278,10 +278,8 @@ int main(int argc, char **argv)
                     timers.convergence_time += wtime() - conv_tick;
 
                 // Do any profiler updates for timings
-/*
                 if (rankinfo.rank == 0)
                     inner_profiler(&timers, &problem);
-*/
 
                 if (innerdone)
                 {
