@@ -443,9 +443,9 @@ void print_cuda_info(void)
 
     // Driver version
     int driver, runtime;
-    cudaGetDriverVersion(&driver);
+    cudaDriverGetVersion(&driver);
     check_cuda("Getting driver version");
-    cudaGetRuntimeVersion(&runtime);
+    cudaRuntimeGetVersion(&runtime);
     check_cuda("Getting runtime version");
     printf(" Driver\n");
     printf("   %d - %d\n", driver, runtime);
