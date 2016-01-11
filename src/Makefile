@@ -22,7 +22,7 @@ snap: \
 	source.o \
 	sweep.o \
 	cuda_buffers.c \
-	scalar_flux.c \
+	scalar_flux.o \
 	convergence.c \
 	population.c \
 	profiler.c \
