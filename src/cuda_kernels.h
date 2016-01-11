@@ -5,6 +5,8 @@
 * \brief Contains function declarations of kernels
 */
 
+#include "sweep.h"
+
 __global__
 void calc_dd_coeff(
     const double dx,
