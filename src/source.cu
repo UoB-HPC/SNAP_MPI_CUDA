@@ -5,13 +5,14 @@
 void compute_outer_source(
     const struct problem * problem,
     const struct rankinfo * rankinfo,
-    struct buffers * buffers
+    struct buffers * buffers,
+    struct events * events
     )
 {
     dim3 grid(rankinfo->nx, rankinfo->ny, rankinfo->nz);
     dim3 threads(1,1,1);
 
-    cudaEventRecord(outer_source_event_start);
+    cudaEventRecord(events->outer_source_event_start);
     check_cuda("Recording outer source start event");
 
     calc_outer_source<<< grid, threads >>>(
@@ -23,7 +24,7 @@ void compute_outer_source(
     );
     check_cuda("Enqueue outer source kernel");
 
-    cudaEventRecord(outer_source_event_stop);
+    cudaEventRecord(events->outer_source_event_stop);
     check_cuda("Recording outer source stop event");
 }
 
@@ -31,13 +32,14 @@ void compute_outer_source(
 void compute_inner_source(
     const struct problem * problem,
     const struct rankinfo * rankinfo,
-    struct buffers * buffers
+    struct buffers * buffers,
+    struct events * events
     )
 {
     dim3 grid(rankinfo->nx, rankinfo->ny, rankinfo->nz);
     dim3 threads(1, 1, 1);
 
-    cudaEventRecord(inner_source_event_start);
+    cudaEventRecord(events->inner_source_event_start);
     check_cuda("Recording inner source start event");
 
     calc_inner_source<<< grid, threads >>>(
@@ -49,7 +51,7 @@ void compute_inner_source(
     );
     check_cuda("Enqueue inner source kernel");
 
-    cudaEventRecord(inner_source_event_stop);
+    cudaEventRecord(events->inner_source_event_stop);
     check_cuda("Recording inner source stop event");
 }
 

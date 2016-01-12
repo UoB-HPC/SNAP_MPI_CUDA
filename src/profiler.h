@@ -87,10 +87,10 @@ extern "C"
 double wtime(void);
 
 /** \brief Update the timers every outer */
-void outer_profiler(struct timers * timers);
+void outer_profiler(struct timers * timers, struct events * events);
 
 /** \brief Update the timers every inner */
-void inner_profiler(struct timers * timers, struct problem * problem);
+void inner_profiler(struct timers * timers, struct problem * problem, struct events * events);
 
 /** \brief Update the timers every chunk with transfer times */
 void chunk_profiler(struct timers * timers);

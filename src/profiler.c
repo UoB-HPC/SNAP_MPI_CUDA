@@ -9,7 +9,7 @@ double wtime(void)
 }
 
 
-void outer_profiler(struct timers * timers)
+void outer_profiler(struct timers * timers, struct events * events)
 {
     if (!profiling)
         return;
@@ -19,7 +19,7 @@ void outer_profiler(struct timers * timers)
     float time;
 
     // Get outer souce update times
-    cudaEventElapsedTime(&time, outer_source_event_start, outer_source_event_stop);
+    cudaEventElapsedTime(&time, events->outer_source_event_start, events->outer_source_event_stop);
     check_cuda("Getting outer source time");
     timers->outer_source_time += (double)(time) * 1.0E-3;
 
@@ -36,7 +36,7 @@ void outer_profiler(struct timers * timers)
 
 
 
-void inner_profiler(struct timers * timers, struct problem * problem)
+void inner_profiler(struct timers * timers, struct problem * problem, struct events * events)
 {
     if (!profiling)
         return;
@@ -45,17 +45,17 @@ void inner_profiler(struct timers * timers, struct problem * problem)
     float time;
 
     // Get inner source update times
-    cudaEventElapsedTime(&time, inner_source_event_start, inner_source_event_stop);
+    cudaEventElapsedTime(&time, events->inner_source_event_start, events->inner_source_event_stop);
     check_cuda("Getting inner source time");
     timers->inner_source_time += (double)(time) * 1.0E-3;
 
     // Get scalar flux reduction times
-    cudaEventElapsedTime(&time, scalar_flux_event_start, scalar_flux_event_stop);
+    cudaEventElapsedTime(&time, events->scalar_flux_event_start, events->scalar_flux_event_stop);
     check_cuda("Getting scalar flux time");
     timers->reduction_time += (double)(time) * 1.0E-3;
     if (problem->cmom-1 > 0)
     {
-        cudaEventElapsedTime(&time, scalar_flux_moments_event_start, scalar_flux_moments_event_stop);
+        cudaEventElapsedTime(&time, events->scalar_flux_moments_event_start, events->scalar_flux_moments_event_stop);
         check_cuda("Getting scalar flux moments time");
         timers->reduction_time += (double)(time) * 1.0E-3;
     }

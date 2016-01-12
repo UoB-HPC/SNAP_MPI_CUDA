@@ -4,7 +4,8 @@
 void compute_scalar_flux(
     struct problem * problem,
     struct rankinfo * rankinfo,
-    struct buffers * buffers
+    struct buffers * buffers,
+    struct events * events
     )
 {
 
@@ -14,7 +15,7 @@ void compute_scalar_flux(
     dim3 blocks(problem->ng, rankinfo->nx*rankinfo->ny*rankinfo->nz, 1);
     dim3 threads(power, 1, 1);
 
-    cudaEventRecord(scalar_flux_event_start);
+    cudaEventRecord(events->scalar_flux_event_start);
     check_cuda("Recording scalar flux start event");
 
     reduce_flux<<< blocks, threads, sizeof(double)*power >>>(
@@ -41,14 +42,15 @@ void compute_scalar_flux(
     );
     check_cuda("Enqueueing scalar flux reduction kernel");
 
-    cudaEventRecord(scalar_flux_event_stop);
+    cudaEventRecord(events->scalar_flux_event_stop);
     check_cuda("Recording scalar flux stop event");
 }
 
 void compute_scalar_flux_moments(
     struct problem * problem,
     struct rankinfo * rankinfo,
-    struct buffers * buffers
+    struct buffers * buffers,
+    struct events * events
     )
 {
 
@@ -58,7 +60,7 @@ void compute_scalar_flux_moments(
     dim3 blocks(problem->ng, rankinfo->nx*rankinfo->ny*rankinfo->nz, 1);
     dim3 threads(power, 1, 1);
 
-    cudaEventRecord(scalar_flux_moments_event_start);
+    cudaEventRecord(events->scalar_flux_moments_event_start);
     check_cuda("Recording scalar flux moments start event");
 
     reduce_flux_moments<<< blocks, threads, sizeof(double)*power >>>(
@@ -86,7 +88,7 @@ void compute_scalar_flux_moments(
     );
     check_cuda("Enqueueing scalar flux moments reduction kernel");
 
-    cudaEventRecord(scalar_flux_moments_event_stop);
+    cudaEventRecord(events->scalar_flux_moments_event_stop);
     check_cuda("Recording scalar flux moments stop event");
 }
 

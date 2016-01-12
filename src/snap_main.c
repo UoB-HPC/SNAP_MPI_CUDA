@@ -199,7 +199,7 @@ int main(int argc, char **argv)
             calculate_dd_coefficients(&problem, &buffers);
             calculate_denominator(&problem, &rankinfo, &buffers);
 
-            compute_outer_source(&problem, &rankinfo, &buffers);
+            compute_outer_source(&problem, &rankinfo, &buffers, &events);
 
             // Get the scalar flux back
             copy_back_scalar_flux(&problem, &rankinfo, &buffers, memory.old_outer_scalar_flux);
@@ -210,7 +210,7 @@ int main(int argc, char **argv)
             unsigned int i;
             for (i = 0; i < problem.iitm; i++)
             {
-                compute_inner_source(&problem, &rankinfo, &buffers);
+                compute_inner_source(&problem, &rankinfo, &buffers, &events);
 
                 // Get the scalar flux back
                 copy_back_scalar_flux(&problem, &rankinfo, &buffers, memory.old_inner_scalar_flux);
@@ -264,9 +264,9 @@ int main(int argc, char **argv)
 
 
                 // Compute the Scalar Flux
-                compute_scalar_flux(&problem, &rankinfo, &buffers);
+                compute_scalar_flux(&problem, &rankinfo, &buffers, &events);
                 if (problem.cmom-1 > 0)
-                    compute_scalar_flux_moments(&problem, &rankinfo, &buffers);
+                    compute_scalar_flux_moments(&problem, &rankinfo, &buffers, &events);
 
                 // Get the new scalar flux back and check inner convergence
                 copy_back_scalar_flux(&problem, &rankinfo, &buffers, memory.scalar_flux);
@@ -280,7 +280,7 @@ int main(int argc, char **argv)
 
                 // Do any profiler updates for timings
                 if (rankinfo.rank == 0)
-                    inner_profiler(&timers, &problem);
+                    inner_profiler(&timers, &problem, &events);
 
                 if (innerdone)
                 {
@@ -309,7 +309,7 @@ int main(int argc, char **argv)
 
             // Do any profiler updates for timings
             if (rankinfo.rank == 0)
-                outer_profiler(&timers);
+                outer_profiler(&timers, &events);
 
             if (outerdone)
                 break;

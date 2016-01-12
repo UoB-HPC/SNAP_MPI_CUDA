@@ -29,13 +29,13 @@ extern "C"
 * First moment is set to fixed source. Subsequent momemnts
 * use group-to-group scattering.
 */
-void compute_outer_source(const struct problem * problem, const struct rankinfo * rankinfo, struct buffers * buffers);
+void compute_outer_source(const struct problem * problem, const struct rankinfo * rankinfo, struct buffers * buffers, struct events * events);
 
 /** \brief Compute the inner source on the device (non-blocking)
 *
 * Set to the outer source plus within group scattering based on scalar flux and scalar flux moments.
 */
-void compute_inner_source(const struct problem * problem, const struct rankinfo * rankinfo, struct buffers * buffers);
+void compute_inner_source(const struct problem * problem, const struct rankinfo * rankinfo, struct buffers * buffers, struct events * events);
 
 #ifdef __cplusplus
 }
