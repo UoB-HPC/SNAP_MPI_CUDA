@@ -49,29 +49,32 @@ extern double sweep_mpi_recv_time;
 
 
 /** @{ \brief OpenCL Events used to later read compute timings if profiling is on */
-cudaEvent_t outer_source_event_start;
-cudaEvent_t outer_source_event_stop;
-cudaEvent_t inner_source_event_start;
-cudaEvent_t inner_source_event_stop;
+struct events
+{
+    cudaEvent_t outer_source_event_start;
+    cudaEvent_t outer_source_event_stop;
+    cudaEvent_t inner_source_event_start;
+    cudaEvent_t inner_source_event_stop;
 
-cudaEvent_t scalar_flux_event_start;
-cudaEvent_t scalar_flux_event_stop;
-cudaEvent_t scalar_flux_moments_event_start;
-cudaEvent_t scalar_flux_moments_event_stop;
+    cudaEvent_t scalar_flux_event_start;
+    cudaEvent_t scalar_flux_event_stop;
+    cudaEvent_t scalar_flux_moments_event_start;
+    cudaEvent_t scalar_flux_moments_event_stop;
 
-cudaEvent_t velocity_delta_event_start;
-cudaEvent_t velocity_delta_event_stop;
-cudaEvent_t denominator_event_start;
-cudaEvent_t denominator_event_stop;
+    cudaEvent_t velocity_delta_event_start;
+    cudaEvent_t velocity_delta_event_stop;
+    cudaEvent_t denominator_event_start;
+    cudaEvent_t denominator_event_stop;
 
-cudaEvent_t flux_i_read_event_start;
-cudaEvent_t flux_i_read_event_stop;
-cudaEvent_t flux_j_read_event_start;
-cudaEvent_t flux_j_read_event_stop;
-cudaEvent_t flux_i_write_event_start;
-cudaEvent_t flux_i_write_event_stop;
-cudaEvent_t flux_j_write_event_start;
-cudaEvent_t flux_j_write_event_stop;
+    cudaEvent_t flux_i_read_event_start;
+    cudaEvent_t flux_i_read_event_stop;
+    cudaEvent_t flux_j_read_event_start;
+    cudaEvent_t flux_j_read_event_stop;
+    cudaEvent_t flux_i_write_event_start;
+    cudaEvent_t flux_i_write_event_stop;
+    cudaEvent_t flux_j_write_event_start;
+    cudaEvent_t flux_j_write_event_stop;
+};
 /** @} */
 
 
@@ -93,10 +96,10 @@ void inner_profiler(struct timers * timers, struct problem * problem);
 void chunk_profiler(struct timers * timers);
 
 /** \brief Create event objects (only used once) */
-void create_events(void);
+void create_events(struct events * events);
 
 /** \brief Destroy event objects (only used once) */
-void destroy_events(void);
+void destroy_events(struct events * events);
 
 #ifdef __cplusplus
 }
