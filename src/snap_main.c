@@ -238,19 +238,17 @@ int main(int argc, char **argv)
                             for (unsigned int z_pos = 0; z_pos < rankinfo.nz; z_pos += problem.chunk)
                             {
                                 double tick = wtime();
-                                recv_boundaries(z_pos, octant, istep, jstep, kstep, &problem, &rankinfo, &memory, &buffers);
+                                recv_boundaries(z_pos, octant, istep, jstep, kstep, &problem, &rankinfo, &memory, &buffers, &events);
                                 sweep_mpi_recv_time += wtime() - tick;
                                 for (unsigned int p = 0; p < num_planes; p++)
                                 {
                                     sweep_plane(z_pos, octant, istep, jstep, kstep, p, planes, &problem, &rankinfo, &buffers);
                                 }
-                                send_boundaries(z_pos, octant, istep, jstep, kstep, &problem, &rankinfo, &memory, &buffers);
+                                send_boundaries(z_pos, octant, istep, jstep, kstep, &problem, &rankinfo, &memory, &buffers, &events);
                             }
 
-/*
                             if (profiling && rankinfo.rank == 0)
-                                chunk_profiler(&timers);
-*/
+                                chunk_profiler(&timers, &events);
 
                             octant += 1;
                         }

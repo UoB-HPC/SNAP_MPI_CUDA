@@ -98,7 +98,9 @@ void calculate_neighbours(MPI_Comm comms,  struct problem * problem, struct rank
 
 void recv_boundaries(int z_pos, const int octant, const int istep, const int jstep, const int kstep,
     struct problem * problem, struct rankinfo * rankinfo,
-    struct memory * memory, struct buffers * buffers)
+    struct memory * memory, struct buffers * buffers,
+    struct events * events
+    )
 {
     int mpi_err;
 
@@ -138,10 +140,12 @@ void recv_boundaries(int z_pos, const int octant, const int istep, const int jst
             check_mpi(mpi_err, "Receiving from downward x neighbour");
         }
         // Copy flux_i to the device
+        load_event(events->flux_i_write_event_start);
         cudaMemcpy(buffers->flux_i+i_offset, memory->flux_i+i_offset,
             sizeof(double)*problem->nang*problem->ng*rankinfo->ny*problem->chunk,
             cudaMemcpyHostToDevice);
         check_cuda("Copying flux i buffer to device");
+        load_event(events->flux_i_write_event_stop);
     }
 
     size_t j_offset;
@@ -176,17 +180,21 @@ void recv_boundaries(int z_pos, const int octant, const int istep, const int jst
             check_mpi(mpi_err, "Receiving from downward y neighbour");
         }
         // Copy flux_j to the device
+        load_event(events->flux_j_write_event_start);
         cudaMemcpy(buffers->flux_j+j_offset, memory->flux_j+j_offset,
             sizeof(double)*problem->nang*problem->ng*rankinfo->nx*problem->chunk,
             cudaMemcpyHostToDevice);
         check_cuda("Copying flux j buffer to device");
+        load_event(events->flux_j_write_event_stop);
     }
 }
 
 
 void send_boundaries(int z_pos, const int octant, const int istep, const int jstep, const int kstep,
     struct problem * problem, struct rankinfo * rankinfo,
-    struct memory * memory, struct buffers * buffers)
+    struct memory * memory, struct buffers * buffers,
+    struct events * events
+    )
 {
     int mpi_err;
 
@@ -203,10 +211,12 @@ void send_boundaries(int z_pos, const int octant, const int istep, const int jst
     {
         i_offset = problem->nang*problem->ng*rankinfo->ny*z_pos;
     }
+    load_event(events->flux_i_read_event_start);
     cudaMemcpy(memory->flux_i+i_offset, buffers->flux_i+i_offset,
         sizeof(double)*problem->nang*problem->ng*rankinfo->ny*problem->chunk,
         cudaMemcpyDeviceToHost);
     check_cuda("Copying flux i buffer back to host");
+    load_event(events->flux_i_read_event_stop);
 
     // J
     size_t j_offset;
@@ -220,10 +230,12 @@ void send_boundaries(int z_pos, const int octant, const int istep, const int jst
     {
         j_offset = problem->nang*problem->ng*rankinfo->nx*z_pos;
     }
+    load_event(events->flux_j_read_event_start);
     cudaMemcpy(memory->flux_j+j_offset, buffers->flux_j+j_offset,
         sizeof(double)*problem->nang*problem->ng*rankinfo->nx*problem->chunk,
         cudaMemcpyDeviceToHost);
     check_cuda("Copying flux j buffer back to host");
+    load_event(events->flux_j_read_event_stop);
 
     double tick = wtime();
 

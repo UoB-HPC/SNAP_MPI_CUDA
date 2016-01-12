@@ -91,7 +91,7 @@ void outer_profiler(struct timers * timers, struct events * events);
 void inner_profiler(struct timers * timers, struct problem * problem, struct events * events);
 
 /** \brief Update the timers every chunk with transfer times */
-void chunk_profiler(struct timers * timers);
+void chunk_profiler(struct timers * timers, struct events * events);
 
 /** \brief Create event objects (only used once) */
 void create_events(struct events * events);

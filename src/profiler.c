@@ -57,58 +57,52 @@ void inner_profiler(struct timers * timers, struct problem * problem, struct eve
     }
 }
 
-/*
 
-void chunk_profiler(struct timers * timers)
+void chunk_profiler(struct timers * timers, struct events * events)
 {
     if (!profiling)
         return;
 
-    cl_int err;
-
+    cudaError_t err;
     // Times are in nanoseconds
-    cl_ulong tick, tock;
+    float time;
 
     // Get recv writes
-    if (flux_i_write_event)
+    cudaEventElapsedTime(&time, events->flux_i_write_event_start, events->flux_i_write_event_stop);
+    err = cudaGetLastError();
+    if (err != cudaErrorInvalidResourceHandle)
     {
-        err = clGetEventProfilingInfo(flux_i_write_event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &tick, NULL);
-        check_ocl(err, "Getting flux i write start time");
-        err = clGetEventProfilingInfo(flux_i_write_event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &tock, NULL);
-        check_ocl(err, "Getting flux i write stop time");
-        timers->sweep_transfer_time += (double)(tock - tick) * 1.0E-9;
+        check_cuda("Getting flux i write time");
+        timers->sweep_transfer_time += (double)(time) * 1.0E-3;
     }
 
-    if (flux_j_write_event)
+    cudaEventElapsedTime(&time, events->flux_j_write_event_start, events->flux_j_write_event_stop);
+    err = cudaGetLastError();
+    if (err != cudaErrorInvalidResourceHandle)
     {
-        err = clGetEventProfilingInfo(flux_j_write_event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &tick, NULL);
-        check_ocl(err, "Getting flux j write start time");
-        err = clGetEventProfilingInfo(flux_j_write_event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &tock, NULL);
-        check_ocl(err, "Getting flux j write stop time");
-        timers->sweep_transfer_time += (double)(tock - tick) * 1.0E-9;
+        check_cuda("Getting flux j write time");
+        timers->sweep_transfer_time += (double)(time) * 1.0E-3;
     }
 
     // Get send reads
-    if (flux_i_read_event)
+    cudaEventElapsedTime(&time, events->flux_i_read_event_start, events->flux_i_read_event_stop);
+    err = cudaGetLastError();
+    if (err != cudaErrorInvalidResourceHandle)
     {
-        err = clGetEventProfilingInfo(flux_i_read_event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &tick, NULL);
-        check_ocl(err, "Getting flux i read start time");
-        err = clGetEventProfilingInfo(flux_i_read_event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &tock, NULL);
-        check_ocl(err, "Getting flux i read stop time");
-        timers->sweep_transfer_time += (double)(tock - tick) * 1.0E-9;
+        check_cuda("Getting flux i read time");
+        timers->sweep_transfer_time += (double)(time) * 1.0E-3;
     }
 
-    if (flux_j_read_event)
+    cudaEventElapsedTime(&time, events->flux_j_read_event_start, events->flux_j_read_event_stop);
+    err = cudaGetLastError();
+    if (err != cudaErrorInvalidResourceHandle)
     {
-        err = clGetEventProfilingInfo(flux_j_read_event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &tick, NULL);
-        check_ocl(err, "Getting flux j read start time");
-        err = clGetEventProfilingInfo(flux_j_read_event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &tock, NULL);
-        check_ocl(err, "Getting flux j read stop time");
-        timers->sweep_transfer_time += (double)(tock - tick) * 1.0E-9;
+        check_cuda("Getting flux j read time");
+        timers->sweep_transfer_time += (double)(time) * 1.0E-3;
     }
+
 }
 
-*/
 
 void create_events(struct events * events)
 {

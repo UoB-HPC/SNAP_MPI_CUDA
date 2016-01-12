@@ -26,7 +26,8 @@ snap: \
 	convergence.c \
 	population.c \
 	profiler.c \
-	cuda_error.c
+	cuda_error.c \
+	events.o
 	$(MPI_COMPILER) $^ $(CFLAGS_$(COMPILER)) $(CUDA) $(OPTIONS) -o $@
 
 %.o:	%.cu
