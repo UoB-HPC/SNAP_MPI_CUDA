@@ -447,7 +447,8 @@ void print_cuda_info(void)
     cudaRuntimeGetVersion(&runtime);
     check_cuda("Getting runtime version");
     printf(" Driver\n");
-    printf("   %d - %d\n", driver, runtime);
+    printf("   Driver %d\n", driver);
+    printf("   Runtime %d\n", runtime);
     printf("\n");
 }
 
