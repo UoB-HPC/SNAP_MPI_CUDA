@@ -136,10 +136,6 @@ void create_events(struct events * events)
 
     cudaEventCreate(&events->velocity_delta_event_start);
     check_cuda("Creating velocity delta event start");
-    cudaEventCreate(&events->velocity_delta_event_stop);
-    check_cuda("Creating velocity delta event stop");
-    cudaEventCreate(&events->denominator_event_start);
-    check_cuda("Creating denoninator event start");
     cudaEventCreate(&events->denominator_event_stop);
     check_cuda("Creating denoninator event stop");
 
@@ -184,9 +180,6 @@ void destroy_events(struct events * events)
 
     cudaEventDestroy(events->velocity_delta_event_start);
     check_cuda("Creating velocity delta event start");
-    cudaEventDestroy(events->velocity_delta_event_stop);
-    check_cuda("Creating velocity delta event stop");
-    cudaEventDestroy(events->denominator_event_start);
     check_cuda("Creating denoninator event start");
     cudaEventDestroy(events->denominator_event_stop);
     check_cuda("Creating denoninator event stop");

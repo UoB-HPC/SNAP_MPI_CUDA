@@ -240,10 +240,15 @@ void init_velocities(
 
 void init_velocity_delta(
     const struct problem * problem,
-    const struct buffers * buffers
+    const struct buffers * buffers,
+    struct events * events
     )
 {
     // We do this on the device because SNAP does it every outer
+
+    cudaEventRecord(events->velocity_delta_event_start);
+    check_cuda("Recording velocity delta start event");
+
     calc_velocity_delta<<< problem->ng, 1 >>>(
         buffers->velocities, problem->dt, buffers->velocity_delta);
     check_cuda("Enqueue velocity delta calculation kernel");
