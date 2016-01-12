@@ -10,6 +10,11 @@
 
 #include "cuda_kernels.h"
 
+#ifndef BLOCK_SIZE_2D
+// So blocks are 256 = 16*16 threads
+#define BLOCK_SIZE_2D 16
+#endif
+
 /** \file
 * \brief Basic CUDA routines and global structures
 */

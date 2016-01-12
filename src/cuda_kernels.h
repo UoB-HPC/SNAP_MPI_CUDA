@@ -153,6 +153,7 @@ void sweep_plane_kernel(
     const int kstep,
     const unsigned int oct,
     const unsigned int z_pos,
+    const unsigned int num_planes,
     const struct cell_id * plane,
     const double * __restrict__ source,
     const double * __restrict__ scat_coeff,

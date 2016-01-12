@@ -70,15 +70,15 @@ void sweep_plane(
     // 2 dimensional kernel
     // First dimension: number of angles * number of groups
     // Second dimension: number of cells in plane
-    dim3 blocks(problem->nang*problem->ng, planes[plane].num_cells, 1);
-    dim3 threads(1, 1, 1);
+    dim3 blocks(ceil(problem->nang*problem->ng/(double)BLOCK_SIZE_2D), ceil(planes[plane].num_cells/(double)BLOCK_SIZE_2D), 1);
+    dim3 threads(BLOCK_SIZE_2D, BLOCK_SIZE_2D, 1);
 
     sweep_plane_kernel<<< blocks, threads >>>(
         rankinfo->nx, rankinfo->ny, rankinfo->nz,
         problem->nang, problem->ng, problem->cmom,
         istep, jstep, kstep, octant, z_pos,
-        buffers->planes[plane], buffers->inner_source,
-        buffers->scat_coeff,
+        planes[plane].num_cells, buffers->planes[plane],
+        buffers->inner_source, buffers->scat_coeff,
         buffers->dd_i, buffers->dd_j, buffers->dd_k,
         buffers->mu, buffers->velocity_delta,
         buffers->mat_cross_section, buffers->denominator,

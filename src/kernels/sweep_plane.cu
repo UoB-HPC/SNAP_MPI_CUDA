@@ -35,6 +35,7 @@ __global__ void sweep_plane_kernel(
     const int kstep,
     const unsigned int oct,
     const unsigned int z_pos,
+    const unsigned int num_cells,
     const struct cell_id * plane,
     const double * __restrict__ source,
     const double * __restrict__ scat_coeff,
@@ -55,6 +56,9 @@ __global__ void sweep_plane_kernel(
     // Recover indexes for angle and group
     const size_t global_id_x = blockIdx.x * blockDim.x + threadIdx.x;
     const size_t global_id_y = blockIdx.y * blockDim.y + threadIdx.y;
+
+    if (global_id_x >= nang*ng) return;
+    if (global_id_y >= num_cells) return;
 
     const size_t a = global_id_x % nang;
     const size_t g = global_id_x / nang;
