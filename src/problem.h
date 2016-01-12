@@ -104,7 +104,7 @@ void calculate_dd_coefficients(const struct problem * problem, const struct buff
 *
 * Called every outer.
 */
-void calculate_denominator(const struct problem * problem, const struct rankinfo * rankinfo, const struct buffers * buffers);
+void calculate_denominator(const struct problem * problem, const struct rankinfo * rankinfo, const struct buffers * buffers, struct events * events);
 
 #ifdef __cplusplus
 } // extern "C"

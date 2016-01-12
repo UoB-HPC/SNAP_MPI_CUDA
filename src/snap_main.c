@@ -197,7 +197,7 @@ int main(int argc, char **argv)
         {
             init_velocity_delta(&problem, &buffers, &events);
             calculate_dd_coefficients(&problem, &buffers);
-            calculate_denominator(&problem, &rankinfo, &buffers);
+            calculate_denominator(&problem, &rankinfo, &buffers, &events);
 
             compute_outer_source(&problem, &rankinfo, &buffers, &events);
 

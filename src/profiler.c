@@ -23,15 +23,11 @@ void outer_profiler(struct timers * timers, struct events * events)
     check_cuda("Getting outer source time");
     timers->outer_source_time += (double)(time) * 1.0E-3;
 
-/*
     // Get outer parameter times
     // Start is velocity delta start, end is denominator end
-    err = clGetEventProfilingInfo(velocity_delta_event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &tick, NULL);
-    check_ocl(err, "Getting velocity delta start time");
-    err = clGetEventProfilingInfo(denominator_event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &tock, NULL);
-    check_ocl(err, "Getting denominator end time");
-    timers->outer_params_time += (double)(tock - tick) * 1.0E-9;
-*/
+    cudaEventElapsedTime(&time, events->velocity_delta_event_start, events->denominator_event_stop);
+    check_cuda("Getting outer parameters time");
+    timers->outer_params_time += (double)(time) * 1.0E-3;
 }
 
 

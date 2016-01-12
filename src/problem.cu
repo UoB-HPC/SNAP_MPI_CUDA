@@ -271,12 +271,14 @@ void calculate_dd_coefficients(
 void calculate_denominator(
     const struct problem * problem,
     const struct rankinfo * rankinfo,
-    const struct buffers * buffers
+    const struct buffers * buffers,
+    struct events * events
     )
 {
     // We do this on the device because SNAP does it every outer
     dim3 grid(problem->nang, problem->ng, 1);
     dim3 threads(1, 1, 1);
+
     calc_denominator<<< grid, threads >>>(
         rankinfo->nx, rankinfo->ny, rankinfo->nz,
         problem->nang, problem->ng,
@@ -285,5 +287,8 @@ void calculate_denominator(
         buffers->denominator
     );
     check_cuda("Enqueue denominator kernel");
+
+    cudaEventRecord(events->denominator_event_stop);
+    check_cuda("Recording denominator stop event");
 }
 
