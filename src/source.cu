@@ -36,8 +36,8 @@ void compute_inner_source(
     struct events * events
     )
 {
-    dim3 grid(rankinfo->nx, rankinfo->ny, rankinfo->nz);
-    dim3 threads(1, 1, 1);
+    dim3 grid(ceil(rankinfo->nx/(float)BLOCK_SIZE_2D), ceil(rankinfo->ny/(float)BLOCK_SIZE_2D), rankinfo->nz);
+    dim3 threads(BLOCK_SIZE_2D, BLOCK_SIZE_2D, 1);
 
     cudaEventRecord(events->inner_source_event_start);
     check_cuda("Recording inner source start event");
