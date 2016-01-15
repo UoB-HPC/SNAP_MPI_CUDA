@@ -16,7 +16,7 @@ void allocate_buffers(
         check_cuda("Creating an angular flux in buffer");
 
         cudaMalloc(
-            &(buffers->angular_flux_out[i]),
+            (void **)&(buffers->angular_flux_out[i]),
             sizeof(double)*problem->nang*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz
         );
         check_cuda("Creating an angular flux out buffer");
