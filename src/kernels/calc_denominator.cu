@@ -20,6 +20,9 @@ __global__ void calc_denominator(
     size_t a = blockIdx.x * blockDim.x + threadIdx.x;
     size_t g = blockIdx.y * blockDim.y + threadIdx.y;
 
+    if (a >= nang) return;
+    if (g >= ng)   return;
+
     for (unsigned int k = 0; k < nz; k++)
         for (unsigned int j = 0; j < ny; j++)
             for (unsigned int i = 0; i < nx; i++)

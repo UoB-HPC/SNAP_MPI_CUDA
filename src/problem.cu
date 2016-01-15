@@ -276,8 +276,8 @@ void calculate_denominator(
     )
 {
     // We do this on the device because SNAP does it every outer
-    dim3 grid(problem->nang, problem->ng, 1);
-    dim3 threads(1, 1, 1);
+    dim3 grid(ceil(problem->nang/(float)BLOCK_SIZE_2D), ceil(problem->ng/(float)BLOCK_SIZE_2D), 1);
+    dim3 threads(BLOCK_SIZE_2D, BLOCK_SIZE_2D, 1);
 
     calc_denominator<<< grid, threads >>>(
         rankinfo->nx, rankinfo->ny, rankinfo->nz,
