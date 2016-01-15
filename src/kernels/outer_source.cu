@@ -32,6 +32,10 @@ __global__ void calc_outer_source(
     const size_t j = blockIdx.y * blockDim.y + threadIdx.y;
     const size_t k = blockIdx.z * blockDim.z + threadIdx.z;
 
+    if (i >= nx) return;
+    if (j >= ny) return;
+    if (k >= nz) return;
+
     for (unsigned int g = 0; g < ng; g++)
     {
         // Set first moment to the fixed source
