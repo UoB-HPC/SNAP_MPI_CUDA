@@ -6,11 +6,6 @@
 
 void allocate_memory(struct problem * problem, struct rankinfo * rankinfo, struct memory * memory)
 {
-    // Allocate two copies of the angular flux
-    // grid * angles * noct (8) * ng
-    memory->angular_flux_in = malloc(sizeof(double)*rankinfo->nx*rankinfo->ny*rankinfo->nz*problem->nang*8*problem->ng);
-    memory->angular_flux_out = malloc(sizeof(double)*rankinfo->nx*rankinfo->ny*rankinfo->nz*problem->nang*8*problem->ng);
-
     // Allocate edge arrays
     memory->flux_i = malloc(sizeof(double)*problem->nang*problem->ng*rankinfo->ny*rankinfo->nz);
     memory->flux_j = malloc(sizeof(double)*problem->nang*problem->ng*rankinfo->nx*rankinfo->nz);
@@ -40,8 +35,6 @@ void allocate_memory(struct problem * problem, struct rankinfo * rankinfo, struc
 
 void free_memory(struct memory * memory)
 {
-    free(memory->angular_flux_in);
-    free(memory->angular_flux_out);
     free(memory->flux_i);
     free(memory->flux_j);
     free(memory->flux_k);

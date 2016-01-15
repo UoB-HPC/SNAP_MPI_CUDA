@@ -15,16 +15,6 @@
 */
 struct memory
 {
-	/**@{ \brief Angular flux */
-	/**
-	* Size: (nang, ng, nx, ny, nz, 8)
-	*
-	* Note, rankinfo spatial dimensions, 8 octants
-	*/
-	double *angular_flux_in;
-	double *angular_flux_out;
-	/**@}*/
-
 	/**@{*/
 	/** \brief Edge flux arrays */
 	/** Size: (nang, ng, ny, nz)
