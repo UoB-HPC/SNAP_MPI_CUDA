@@ -12,13 +12,13 @@ void compute_scalar_flux(
     // get closest power of 2 to nang
     size_t power = 1 << (unsigned int)ceil(log2((double)problem->nang));
 
-    dim3 blocks(problem->ng, rankinfo->nx*rankinfo->ny*rankinfo->nz, 1);
-    dim3 threads(power, 1, 1);
+    dim3 blocks(problem->ng, ceil(rankinfo->nx*rankinfo->ny*rankinfo->nz/(float)BLOCK_SIZE_2D), 1);
+    dim3 threads(power, BLOCK_SIZE_2D, 1);
 
     cudaEventRecord(events->scalar_flux_event_start);
     check_cuda("Recording scalar flux start event");
 
-    reduce_flux<<< blocks, threads, sizeof(double)*power >>>(
+    reduce_flux<<< blocks, threads, sizeof(double)*power*BLOCK_SIZE_2D >>>(
         rankinfo->nx, rankinfo->ny, rankinfo->nz,
         problem->nang, problem->ng,
         buffers->angular_flux_in[0],
@@ -57,13 +57,13 @@ void compute_scalar_flux_moments(
     // get closest power of 2 to nang
     size_t power = 1 << (unsigned int)ceil(log2((double)problem->nang));
 
-    dim3 blocks(problem->ng, rankinfo->nx*rankinfo->ny*rankinfo->nz, 1);
-    dim3 threads(power, 1, 1);
+    dim3 blocks(problem->ng, ceil(rankinfo->nx*rankinfo->ny*rankinfo->nz/(float)BLOCK_SIZE_2D), 1);
+    dim3 threads(power, BLOCK_SIZE_2D, 1);
 
     cudaEventRecord(events->scalar_flux_moments_event_start);
     check_cuda("Recording scalar flux moments start event");
 
-    reduce_flux_moments<<< blocks, threads, sizeof(double)*power >>>(
+    reduce_flux_moments<<< blocks, threads, sizeof(double)*power*BLOCK_SIZE_2D >>>(
         rankinfo->nx, rankinfo->ny, rankinfo->nz,
         problem->nang, problem->ng, problem->cmom,
         buffers->angular_flux_in[0],

@@ -70,16 +70,18 @@ __global__ void reduce_flux_moments(
     const size_t j = (global_id / nx) % ny;
     const size_t k = global_id / (nx * ny);
 
+    if (global_id >= nx * ny * nz) return;
+
     for (unsigned int l = 0; l < cmom-1; l++)
     {
         // Load into local memory
-        local_scalar[a] = 0.0;
+        local_scalar[a + (threadIdx.y * blockDim.x)] = 0.0;
         for (unsigned int aa = a; aa < nang; aa += blockDim.x)
         {
             const double w = quad_weights[aa];
             if (velocity_delta[g] != 0.0)
             {
-                local_scalar[a] +=
+                local_scalar[a + (threadIdx.y * blockDim.x)] +=
                     scat_coeff(aa,l+1,0) * w * (0.5 * (angular_flux_out_0(aa,g,i,j,k) + angular_flux_in_0(aa,g,i,j,k))) +
                     scat_coeff(aa,l+1,1) * w * (0.5 * (angular_flux_out_1(aa,g,i,j,k) + angular_flux_in_1(aa,g,i,j,k))) +
                     scat_coeff(aa,l+1,2) * w * (0.5 * (angular_flux_out_2(aa,g,i,j,k) + angular_flux_in_2(aa,g,i,j,k))) +
@@ -91,7 +93,7 @@ __global__ void reduce_flux_moments(
             }
             else
             {
-                local_scalar[a] +=
+                local_scalar[a + (threadIdx.y * blockDim.x)] +=
                     scat_coeff(aa,l+1,0) * w * angular_flux_out_0(aa,g,i,j,k) +
                     scat_coeff(aa,l+1,1) * w * angular_flux_out_1(aa,g,i,j,k) +
                     scat_coeff(aa,l+1,2) * w * angular_flux_out_2(aa,g,i,j,k) +
@@ -110,7 +112,7 @@ __global__ void reduce_flux_moments(
         {
             if (a < offset)
             {
-                local_scalar[a] += local_scalar[a + offset];
+                local_scalar[a + (threadIdx.y * blockDim.x)] += local_scalar[a + offset + (threadIdx.y * blockDim.x)];
             }
             __syncthreads();
         }
@@ -118,7 +120,7 @@ __global__ void reduce_flux_moments(
         // Save result
         if (a == 0)
         {
-            scalar_flux_moments(l,g,i,j,k) = local_scalar[0];
+            scalar_flux_moments(l,g,i,j,k) = local_scalar[0 + (threadIdx.y * blockDim.x)];
         }
     } // End of moment loop
 }
