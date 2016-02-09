@@ -16,7 +16,7 @@ void calculate_population(
                 for (unsigned int g = 0; g < problem->ng; g++)
                 {
                     total += volume *
-                        memory->scalar_flux[SCALAR_FLUX_INDEX(g,i,j,k,problem->ng,rankinfo->nx,rankinfo->ny)];
+                        memory->scalar_flux[SCALAR_FLUX_INDEX(g,i,j,k,problem->ng,rankinfo->nx,rankinfo->ny)] / memory->velocities[g];
                 }
     int err = MPI_Reduce(&total, population, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     check_mpi(err, "Population reduction");
