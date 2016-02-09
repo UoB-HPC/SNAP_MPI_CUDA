@@ -31,6 +31,8 @@ void allocate_memory(struct problem * problem, struct rankinfo * rankinfo, struc
     // Material cross section
     memory->mat_cross_section = malloc(sizeof(double)*problem->ng);
 
+    memory->velocities = malloc(sizeof(double)*problem->ng);
+
 }
 
 void free_memory(struct memory * memory)

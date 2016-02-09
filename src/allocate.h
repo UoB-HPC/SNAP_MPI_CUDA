@@ -72,6 +72,7 @@ struct memory
 	double *mat_cross_section;
 
 
+        double *velocities;
 };
 
 /** \brief Allocate the problem arrays */

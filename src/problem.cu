@@ -222,12 +222,10 @@ void init_scattering_matrix(
 
 void init_velocities(
     const struct problem * problem,
+    double * velocities,
     const struct buffers * buffers
     )
 {
-    // Allocate tempoary array for velocities
-    double *velocities = (double *)malloc(sizeof(double)*problem->ng);
-
     for (unsigned int g = 0; g < problem->ng; g++)
         velocities[g] = (double)(problem->ng - g);
 
@@ -235,7 +233,6 @@ void init_velocities(
     cudaMemcpy(buffers->velocities, velocities,
         sizeof(double)*problem->ng, cudaMemcpyHostToDevice);
     check_cuda("Copying velocities to device");
-    free(velocities);
 }
 
 void init_velocity_delta(

@@ -89,7 +89,7 @@ void init_scattering_matrix(const struct problem * problem, const struct buffers
 *
 * Fake data on group velocity.
 */
-void init_velocities(const struct problem * problem, const struct buffers * buffers);
+void init_velocities(const struct problem * problem, double * velocities, const struct buffers * buffers);
 
 /** \brief Set velocity time delta array on device (non-blocking) */
 void init_velocity_delta(const struct problem * problem, const struct buffers * buffers, struct events * events);
