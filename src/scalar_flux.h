@@ -5,6 +5,8 @@
 * \brief Scalar flux reduction routines
 */
 
+#define RED_BLOCK_SIZE 4
+
 #include <math.h>
 
 #include "global.h"
