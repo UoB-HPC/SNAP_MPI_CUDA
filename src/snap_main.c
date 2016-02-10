@@ -52,6 +52,7 @@ int main(int argc, char **argv)
     check_mpi(mpi_err, "MPI_Init");
 
     struct timers timers;
+    zero_timers(&timers);
     timers.setup_time = wtime();
 
     struct events events;

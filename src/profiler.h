@@ -85,6 +85,9 @@ extern "C"
 /** \brief Get the current wallclock time */
 double wtime(void);
 
+/** \brief Zero the timers */
+void zero_timers(struct timers * timers);
+
 /** \brief Update the timers every outer */
 void outer_profiler(struct timers * timers, struct events * events);
 
