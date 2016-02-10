@@ -36,7 +36,6 @@ snap: \
 KERNEL_HEADER_FILES=\
 	kernels/calc_velocity_delta.o \
 	kernels/calc_dd_coeff.o \
-	kernels/calc_denominator.o \
 	kernels/outer_source.o \
 	kernels/inner_source.o \
 	kernels/sweep_plane.o \

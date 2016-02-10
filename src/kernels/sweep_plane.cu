@@ -11,7 +11,6 @@ struct cell_id
 #define FLUX_J_INDEX(a,g,i,k,nang,ng,nx) ((a)+((nang)*(g))+((nang)*(ng)*(i))+((nang)*(ng)*(nx)*(k)))
 #define FLUX_K_INDEX(a,g,i,j,nang,ng,nx) ((a)+((nang)*(g))+((nang)*(ng)*(i))+((nang)*(ng)*(nx)*(j)))
 #define ANGULAR_FLUX_INDEX(a,g,i,j,k,nang,ng,nx,ny) ((a)+((nang)*(g))+((nang)*(ng)*(i))+((nang)*(ng)*(nx)*(j))+((nang)*(ng)*(nx)*(ny)*(k)))
-#define DENOMINATOR_INDEX(a,g,i,j,k,nang,ng,nx,ny) ((a)+((nang)*(g))+((nang)*(ng)*(i))+((nang)*(ng)*(nx)*(j))+((nang)*(ng)*(nx)*(ny)*(k)))
 
 #define source(m,g,i,j,k) source[SOURCE_INDEX((m),(g),(i),(j),(k),cmom,ng,nx,ny)]
 #define scat_coeff(a,l,o) scat_coeff[SCAT_COEFF_INDEX((a),(l),(o),nang,cmom)]
@@ -20,7 +19,6 @@ struct cell_id
 #define flux_k(a,g,i,j) flux_k[FLUX_K_INDEX((a),(g),(i),(j),nang,ng,nx)]
 #define angular_flux_in(a,g,i,j,k) angular_flux_in[ANGULAR_FLUX_INDEX((a),(g),(i),(j),(k),nang,ng,nx,ny)]
 #define angular_flux_out(a,g,i,j,k) angular_flux_out[ANGULAR_FLUX_INDEX((a),(g),(i),(j),(k),nang,ng,nx,ny)]
-#define denominator(a,g,i,j,k) denominator[DENOMINATOR_INDEX((a),(g),(i),(j),(k),nang,ng,nx,ny)]
 
 
 __global__ void sweep_plane_kernel(
@@ -45,7 +43,6 @@ __global__ void sweep_plane_kernel(
     const double * __restrict__ mu,
     const double * __restrict__ velocity_delta,
     const double * __restrict__ mat_cross_section,
-    const double * __restrict__ denominator,
     const double * __restrict__ angular_flux_in,
     double * __restrict__ flux_i,
     double * __restrict__ flux_j,
@@ -93,8 +90,8 @@ __global__ void sweep_plane_kernel(
         psi += velocity_delta[g] * angular_flux_in(a,g,i,j,k);
     }
 
-    // "Divide" by denominator
-    psi *= denominator(a,g,i,j,k);
+    // Divide by denominator
+    psi /= (mat_cross_section[g] + velocity_delta[g] + mu[a]*dd_i[0] + dd_j[a] + dd_k[a]);
 
     // Compute upwind fluxes
     double tmp_flux_i = 2.0 * psi - flux_i(a,g,j,k);

@@ -253,7 +253,8 @@ void init_velocity_delta(
 
 void calculate_dd_coefficients(
     const struct problem * problem,
-    const struct buffers * buffers
+    const struct buffers * buffers,
+    struct events * events
     )
 {
     // We do this on the device because SNAP does it every outer
@@ -263,6 +264,9 @@ void calculate_dd_coefficients(
         buffers->dd_i, buffers->dd_j, buffers->dd_k
     );
     check_cuda("Enqueue diamond different calculation kernel");
+
+    cudaEventRecord(events->dd_coeff_event_stop);
+    check_cuda("Recording denominator stop event");
 }
 
 void calculate_denominator(
@@ -275,7 +279,7 @@ void calculate_denominator(
     // We do this on the device because SNAP does it every outer
     dim3 grid(ceil(problem->nang/(float)BLOCK_SIZE_2D), ceil(problem->ng/(float)BLOCK_SIZE_2D), 1);
     dim3 threads(BLOCK_SIZE_2D, BLOCK_SIZE_2D, 1);
-
+/*
     calc_denominator<<< grid, threads >>>(
         rankinfo->nx, rankinfo->ny, rankinfo->nz,
         problem->nang, problem->ng,
@@ -284,7 +288,7 @@ void calculate_denominator(
         buffers->denominator
     );
     check_cuda("Enqueue denominator kernel");
-
+*/
     cudaEventRecord(events->denominator_event_stop);
     check_cuda("Recording denominator stop event");
 }

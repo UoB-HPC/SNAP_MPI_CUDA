@@ -110,12 +110,6 @@ void allocate_buffers(
     check_cuda("Creating velocity buffer");
     cudaMalloc((void **)&buffers->velocity_delta, sizeof(double)*problem->ng);
     check_cuda("Creating velocity delta buffer");
-
-    // Denominator array
-    cudaMalloc((void **)&buffers->denominator,
-        sizeof(double)*problem->nang*problem->ng*rankinfo->nx*rankinfo->ny*rankinfo->nz);
-    check_cuda("Creating denominator buffer");
-
 }
 
 void swap_angular_flux_buffers(struct buffers * buffers)

@@ -81,7 +81,7 @@ void sweep_plane(
         buffers->inner_source, buffers->scat_coeff,
         buffers->dd_i, buffers->dd_j, buffers->dd_k,
         buffers->mu, buffers->velocity_delta,
-        buffers->mat_cross_section, buffers->denominator,
+        buffers->mat_cross_section,
         buffers->angular_flux_in[octant],
         buffers->flux_i, buffers->flux_j, buffers->flux_k,
         buffers->angular_flux_out[octant]

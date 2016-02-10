@@ -63,6 +63,7 @@ struct events
 
     cudaEvent_t velocity_delta_event_start;
     cudaEvent_t denominator_event_stop;
+    cudaEvent_t dd_coeff_event_stop;
 
     cudaEvent_t flux_i_read_event_start;
     cudaEvent_t flux_i_read_event_stop;

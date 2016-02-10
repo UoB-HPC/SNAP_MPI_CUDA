@@ -163,7 +163,6 @@ void sweep_plane_kernel(
     const double * __restrict__ mu,
     const double * __restrict__ velocity_delta,
     const double * __restrict__ mat_cross_section,
-    const double * __restrict__ denominator,
     const double * __restrict__ angular_flux_in,
     double * __restrict__ flux_i,
     double * __restrict__ flux_j,

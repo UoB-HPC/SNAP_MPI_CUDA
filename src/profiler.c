@@ -25,7 +25,7 @@ void outer_profiler(struct timers * timers, struct events * events)
 
     // Get outer parameter times
     // Start is velocity delta start, end is denominator end
-    cudaEventElapsedTime(&time, events->velocity_delta_event_start, events->denominator_event_stop);
+    cudaEventElapsedTime(&time, events->velocity_delta_event_start, events->dd_coeff_event_stop);
     check_cuda("Getting outer parameters time");
     timers->outer_params_time += (double)(time) * 1.0E-3;
 }
@@ -128,6 +128,8 @@ void create_events(struct events * events)
     check_cuda("Creating velocity delta event start");
     cudaEventCreate(&events->denominator_event_stop);
     check_cuda("Creating denoninator event stop");
+    cudaEventCreate(&events->dd_coeff_event_stop);
+    check_cuda("Creating dd coeff event stop");
 
     cudaEventCreate(&events->flux_i_read_event_start);
     check_cuda("Creating flux i read event start");
@@ -170,9 +172,10 @@ void destroy_events(struct events * events)
 
     cudaEventDestroy(events->velocity_delta_event_start);
     check_cuda("Creating velocity delta event start");
-    check_cuda("Creating denoninator event start");
     cudaEventDestroy(events->denominator_event_stop);
     check_cuda("Creating denoninator event stop");
+    cudaEventDestroy(events->dd_coeff_event_stop);
+    check_cuda("Creating dd coeff event stop");
 
     cudaEventDestroy(events->flux_i_read_event_start);
     check_cuda("Creating flux i read event start");
