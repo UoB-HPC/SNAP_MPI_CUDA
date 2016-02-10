@@ -70,38 +70,45 @@ __global__ void sweep_plane_kernel(
     //
 
     // Begin with the first scattering moment
-    double source_term = source(0,g,i,j,k);
+    const unsigned int s_stride = (cmom*g)+(cmom*ng*i)+(cmom*ng*nx*j)+(cmom*ng*nx*ny*k);
+    double source_term = source[0 + s_stride];
 
     // Add in the anisotropic scattering source moments
     for (unsigned int l = 1; l < cmom; l++)
     {
-        source_term += scat_coeff(a,l,oct) * source(l,g,i,j,k);
+        source_term += scat_coeff[a+(nang*l)+(nang*cmom*oct)]
+                       * source[l + s_stride];
     }
+
+    const unsigned int i_index = a + (nang*g) + (nang*ng*j) + (nang*ng*ny*k);
+    const unsigned int j_index = a + (nang*g) + (nang*ng*i) + (nang*ng*nx*k);
+    const unsigned int k_index = a + (nang*g) + (nang*ng*i) + + (nang*ng*nx*j);
+    const unsigned int flux_index = k_index + (nang*ng*nx*ny*k);
 
     double psi =
         source_term
-        + flux_i(a,g,j,k)*mu[a]*dd_i[0]
-        + flux_j(a,g,i,k)*dd_j[a]
-        + flux_k(a,g,i,j)*dd_k[a];
+        + flux_i[i_index]*mu[a]*dd_i[0]
+        + flux_j[j_index]*dd_j[a]
+        + flux_k[k_index]*dd_k[a];
 
     // Add contribution from last timestep flux if time-dependant
     if (velocity_delta[g] != 0.0)
     {
-        psi += velocity_delta[g] * angular_flux_in(a,g,i,j,k);
+        psi += velocity_delta[g] * angular_flux_in[flux_index];
     }
 
     // Divide by denominator
     psi /= (mat_cross_section[g] + velocity_delta[g] + mu[a]*dd_i[0] + dd_j[a] + dd_k[a]);
 
     // Compute upwind fluxes
-    double tmp_flux_i = 2.0 * psi - flux_i(a,g,j,k);
-    double tmp_flux_j = 2.0 * psi - flux_j(a,g,i,k);
-    double tmp_flux_k = 2.0 * psi - flux_k(a,g,i,j);
+    double tmp_flux_i = 2.0 * psi - flux_i[i_index];
+    double tmp_flux_j = 2.0 * psi - flux_j[j_index];
+    double tmp_flux_k = 2.0 * psi - flux_k[k_index];
 
     // Time difference the final flux value
     if (velocity_delta[g] != 0.0)
     {
-        psi = 2.0 * psi - angular_flux_in(a,g,i,j,k);
+        psi = 2.0 * psi - angular_flux_in[flux_index];
     }
 
     // Fixup
@@ -121,13 +128,13 @@ __global__ void sweep_plane_kernel(
 
         // Recalculate psi
         psi =
-            flux_i(a,g,j,k)*mu[a]*dd_i[0]*(1.0 + zeros[0]) +
-            flux_j(a,g,i,k)*dd_j[a]*(1.0 + zeros[1]) +
-            flux_k(a,g,i,j)*dd_k[a]*(1.0 + zeros[2]);
+            flux_i[i_index]*mu[a]*dd_i[0]*(1.0 + zeros[0]) +
+            flux_j[j_index]*dd_j[a]*(1.0 + zeros[1]) +
+            flux_k[k_index]*dd_k[a]*(1.0 + zeros[2]);
 
         if (velocity_delta[g] != 0.0)
         {
-            psi += velocity_delta[g] * angular_flux_in(a,g,i,j,k) * (1.0 + zeros[3]);
+            psi += velocity_delta[g] * angular_flux_in[flux_index] * (1.0 + zeros[3]);
         }
 
         psi = 0.5 * psi + source_term;
@@ -147,20 +154,20 @@ __global__ void sweep_plane_kernel(
             psi = 0.0;
         }
 
-        tmp_flux_i = 2.0 * psi - flux_i(a,g,j,k);
-        tmp_flux_j = 2.0 * psi - flux_j(a,g,i,k);
-        tmp_flux_k = 2.0 * psi - flux_k(a,g,i,j);
+        tmp_flux_i = 2.0 * psi - flux_i[i_index];
+        tmp_flux_j = 2.0 * psi - flux_j[j_index];
+        tmp_flux_k = 2.0 * psi - flux_k[k_index];
 
         if (velocity_delta[g] != 0.0)
         {
-            psi = 2.0 * psi - angular_flux_in(a,g,i,j,k);
+            psi = 2.0 * psi - angular_flux_in[flux_index];
         }
 
     }
 
     // Write values to global memory
-    flux_i(a,g,j,k) = tmp_flux_i * zeros[0];
-    flux_j(a,g,i,k) = tmp_flux_j * zeros[1];
-    flux_k(a,g,i,j) = tmp_flux_k * zeros[2];
-    angular_flux_out(a,g,i,j,k) = psi * zeros[3];
+    flux_i[i_index] = tmp_flux_i * zeros[0];
+    flux_j[j_index] = tmp_flux_j * zeros[1];
+    flux_k[k_index] = tmp_flux_k * zeros[2];
+    angular_flux_out[flux_index] = psi * zeros[3];
 }
