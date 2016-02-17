@@ -4,11 +4,15 @@ ifndef COMPILER
 endif
 
 CUDA = -lcudart
+ifeq ($(shell uname), Darwin)
+CUDA = -L$(CUDA_PATH)/lib -lcudart
+endif
 
 CFLAGS_			= -O3
 CFLAGS_INTEL	= -O3 -std=c99
 CFLAGS_CRAY		= -O3
 CFLAGS_GNU		= -O3 -std=c99 -lm
+CFLAGS_OSX	= -O3 -std=c99 -I$(CUDA_PATH)/include
 
 MPI_COMPILER 	= mpicc
 
@@ -31,7 +35,7 @@ snap: \
 	$(MPI_COMPILER) $^ $(CFLAGS_$(COMPILER)) $(CUDA) $(OPTIONS) -o $@
 
 %.o:	%.cu
-	nvcc -c $< -o $@
+	nvcc $(CFLAGS_) -c $< -o $@
 
 KERNEL_HEADER_FILES=\
 	kernels/calc_velocity_delta.o \
